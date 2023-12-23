@@ -1,1 +1,13 @@
-server.port= 8881
+server:
+  port: 8881
+spring:
+  security:
+    user:
+      name: lst
+      password: 123
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
