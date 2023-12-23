@@ -1,4 +1,4 @@
-package cn.edu.ldu.self_study_room.dao;
+package cn.edu.ldu.self_study_room.admin.dao;
 
 public class UserDao {
     public static void main(String[] args) {

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #84fab0, #8fd3f4);
+        }
+        .mainsbody {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45%;
+            height: 60%;
+
+        }
+        .leftpicture{
+            height: 100%;
+            width: 35%;
+            float: left;
+
+            background-size: cover;
+            background-position: center;
+
+        }
+        .rightbody{
+            height: 100%;
+            width: 65%;
+            float: left;
+            background: #FFFFFF;
+            text-align: center;
+        }
+        input{
+            border: 2px solid #000;
+            border-radius: 50px;
+            padding: 10px;
+            width: 200px;
+        }
+        .textforget{
+            margin-left: 25%;
+            text-align: right;
+            font-size: 10px;
+        }
+
+    </style>
+
+<body>
+<div class="mainsbody">
+    <div class="leftpicture">
+        <img src="../images/yinghun.png" style="height: 100%;image-rendering: pixelated">
+    </div>
+    <div class="rightbody">
+        <p style="font-size: 30px;margin-top: 60px">Comic House</p>
+        <p style="font-size: 18px">Welcome Back</p>
+        <form action="/loading">
+            <input type="text" name="username" placeholder="Please input your Username" required>
+            <br>
+            <input type="password" name="password" style="margin-top: 10px" placeholder="Please input your Password" required>
+            <br>
+            <a  class="textforget" href="http://localhost:8881/hello"  >Forget Password?</a><br>
+            <input type="submit" value="LOGIN" style="width: 30%;margin-top: 20px;background:#e22d2d;">
+        </form>
+
+
+
+    </div>
+</div>
+<!--<div th:if="${shows} == 1">-->
+<!--    <script>-->
+<!--        alert("密码不对 or 没有该用户")-->
+<!--    </script>-->
+<!--</div>-->
+
+<!--<div th:if="${shows} == 2">-->
+<!--    <script>-->
+<!--        alert("没有该用户")-->
+<!--    </script>-->
+<!--</div>-->
+<script>
+    function submitForm(event) {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Create an object containing form data
+        const user = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+
+        // Send a POST request and convert the object data to a JSON string
+        fetch('/loading', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data from the server
+                console.log(data);
+            })
+
+    }
+</script>
+</body>
+
+
+</html>
