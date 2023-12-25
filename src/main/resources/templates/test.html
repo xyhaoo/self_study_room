@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>通知发布</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        #validationTextarea {
+            width: 400px;
+            height: 200px;
+            resize: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<form class="was-validated">
+    <div class="mb-3">
+        <label for="validationTextarea">Textarea</label>
+        <textarea class="form-control is-invalid" id="validationTextarea" placeholder="正文..." required></textarea>
+        <div class="invalid-feedback">
+            Please enter a message in the textarea.
+        </div>
+    </div>
+
+</form>
+
+</body>

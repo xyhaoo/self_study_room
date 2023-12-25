@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,5 @@ public class Post {
     private String user_id;
     private String post_title;
     private String post_content;
-    private Date post_time;
+    private Timestamp post_time;
 }
