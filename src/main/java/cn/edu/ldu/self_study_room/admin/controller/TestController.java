@@ -15,7 +15,7 @@ public class TestController {
 
     @GetMapping()
     public ModelAndView notice_publish(){
-        return new ModelAndView("index");
+        return new ModelAndView("admin_index");
     }
 
 }
