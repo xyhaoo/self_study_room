@@ -1,6 +1,5 @@
 package cn.edu.ldu.self_study_room.service.impl;
 
-import cn.edu.ldu.self_study_room.dao.study_roomDao;
 import cn.edu.ldu.self_study_room.dao.userDao;
 import cn.edu.ldu.self_study_room.entity.User;
 import cn.edu.ldu.self_study_room.service.UserService;

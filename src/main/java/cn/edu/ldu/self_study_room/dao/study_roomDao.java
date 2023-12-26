@@ -1,6 +1,6 @@
 package cn.edu.ldu.self_study_room.dao;
 
-import cn.edu.ldu.self_study_room.entity.study_room;
+import cn.edu.ldu.self_study_room.entity.StudyRoom;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -8,12 +8,12 @@ import java.util.List;
 public interface study_roomDao {
     //查询所有记录，供用户点击通知页面时全部展示
     @Select("select * from room")
-    List<study_room> findAll() throws Exception;
+    List<StudyRoom> findAll() throws Exception;
 
     //增加记录，供管理员发布新通知
     @Insert("insert into room(room_id, room_content, room_picture" +
             "values (#{room_id}, #{room_content}, #{room_picture})")
-    void insert(study_room self_study_room) throws Exception;
+    void insert(StudyRoom self_study_room) throws Exception;
 
     //删除记录，供管理员删除通知
     @Delete("delete from room where room_id=#{room_id}")

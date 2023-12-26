@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class favorites {
+public class Favorites {
     String user_id;
     int seat_number;
     int room_id;

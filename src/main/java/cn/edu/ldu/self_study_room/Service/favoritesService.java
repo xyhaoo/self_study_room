@@ -1,11 +1,10 @@
 package cn.edu.ldu.self_study_room.service;
 
-import cn.edu.ldu.self_study_room.entity.Notice;
-import cn.edu.ldu.self_study_room.entity.favorites;
+import cn.edu.ldu.self_study_room.entity.Favorites;
 
 import java.util.List;
 
 public interface favoritesService {
-    List<favorites> findAll() throws Exception;
+    List<Favorites> findAll() throws Exception;
 
 }

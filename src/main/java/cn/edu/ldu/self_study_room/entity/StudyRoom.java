@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class study_room {
+public class StudyRoom {
     int room_id;
     String room_picture;
     String room_content;

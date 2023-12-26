@@ -1,7 +1,6 @@
 package cn.edu.ldu.self_study_room.dao;
 
 import cn.edu.ldu.self_study_room.entity.User;
-import cn.edu.ldu.self_study_room.entity.study_room;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
