@@ -1,8 +1,7 @@
 package cn.edu.ldu.self_study_room.dao;
 
-
-import cn.edu.ldu.self_study_room.entity.Notice;
 import org.apache.ibatis.annotations.*;
+import cn.edu.ldu.self_study_room.entity.Notice;
 
 import java.util.List;
 
