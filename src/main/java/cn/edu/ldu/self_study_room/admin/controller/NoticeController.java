@@ -3,11 +3,9 @@ package cn.edu.ldu.self_study_room.admin.controller;
 
 import cn.edu.ldu.self_study_room.entity.Notice;
 import cn.edu.ldu.self_study_room.service.NoticeService;
+import cn.edu.ldu.self_study_room.service.impl.NoticeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Timestamp;
@@ -16,10 +14,11 @@ import java.util.Random;
 
 //这是通知发布页面，用于管理员发布通知
 @RestController
-@RequestMapping(value = "/self_study_room/admin/notice/publish")
+@RequestMapping(value = "/self_study_room/admin/notice_publish")
 public class NoticeController {
     @Autowired
-    NoticeService noticeService;
+    NoticeServiceImpl noticeService;
+
 
     //发布通知
     //获取管理员提交的通知信息，插入notice表，返回发布状态
@@ -40,10 +39,11 @@ public class NoticeController {
             }
             notice_id = sb.toString();
         }
+
         LocalDateTime currentDateTime = LocalDateTime.now();
         Timestamp now = Timestamp.valueOf(currentDateTime);
         String status = noticeService.insert(new Notice(notice_id, notice_title, notice_content, now));
-        ModelAndView modelAndView = new ModelAndView("notice_publish");
+        ModelAndView modelAndView = new ModelAndView("admin/notice_publish");
         modelAndView.addObject("status", status);
         return modelAndView;
     }

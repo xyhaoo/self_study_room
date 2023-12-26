@@ -12,3 +12,6 @@ spring:
 #    user:
 #      name: xyh
 #      password: 123
+
+server:
+  port: 8881
