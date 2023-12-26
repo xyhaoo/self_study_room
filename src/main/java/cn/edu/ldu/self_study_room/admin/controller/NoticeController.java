@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 //这是通知发布页面，用于管理员发布通知
@@ -27,8 +29,13 @@ public class NoticeController {
                                       @RequestParam String notice_content)
     {
         String notice_id;
+        //插入的通知记录，其id是现有通知中id最大值+1，如果当前没有通知，其值为1
         try {
-            notice_id = String.valueOf(noticeService.findAll().size() + 1);
+            List<Notice> notices = noticeService.findAll();
+            Optional<Integer> maxNoticeId = notices.stream()
+                    .map(notice -> Integer.parseInt(notice.getNotice_id()))
+                    .max(Integer::compareTo);
+            notice_id = maxNoticeId.map(Object::toString).orElse("1");
         }catch (Exception e){
             //findAll方法异常，出现此类型的通知id时，应该修正findAll
             Random random = new Random();

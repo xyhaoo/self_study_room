@@ -3,10 +3,7 @@ package cn.edu.ldu.self_study_room.admin.controller;
 import cn.edu.ldu.self_study_room.entity.Notice;
 import cn.edu.ldu.self_study_room.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -36,6 +33,18 @@ public class AdminController {
         }catch (Exception e){
             modelAndView.addObject("search_failed", "查找异常，请再次尝试。如果此问题依然存在请联系开发者！");
         }
+        return modelAndView;
+    }
+
+
+    // 删除通知
+    @GetMapping(value = "/notice/delete")
+    public ModelAndView deleteNotice(@RequestParam("notice_id") String notice_id) {
+        System.out.println(notice_id);
+        ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/notice");
+
+        modelAndView.addObject("delete_notice_result", noticeService.delete(notice_id));
+
         return modelAndView;
     }
 
