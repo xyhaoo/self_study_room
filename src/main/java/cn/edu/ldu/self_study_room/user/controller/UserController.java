@@ -2,6 +2,8 @@ package cn.edu.ldu.self_study_room.user.controller;
 
 import cn.edu.ldu.self_study_room.entity.Notice;
 import cn.edu.ldu.self_study_room.service.NoticeService;
+import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ public class UserController {
 
     @Autowired
     NoticeService NoticeService;
+    @Autowired
+    UserServiceImpl userService;
 
 
     @GetMapping("/notice")
@@ -35,20 +39,21 @@ public class UserController {
         return new ModelAndView("user/changepassword");
     }
     @GetMapping("/changepassworded")
-    public ModelAndView showfavorite(  @RequestParam("username") String username,
-                                       @RequestParam("phoneNumber") String phoneNumber,
-                                       @RequestParam("password") String password,
-                                       @RequestParam("confirmPassword") String confirmPassword,
-                                       @RequestParam("gender") String gender){
-
+    public ModelAndView showfavorite(@RequestParam("username") String username,
+                                     @RequestParam("phoneNumber") String phoneNumber,
+                                     @RequestParam("password") String password,
+                                     @RequestParam("confirmPassword") String confirmPassword,
+                                     @RequestParam("gender") String gender, HttpSession session){
+        System.out.println(session.getAttribute("user_id"));
+        String user_id= (String) session.getAttribute("user_id");
         System.out.println("用户名：" + username);
         System.out.println("手机号：" + phoneNumber);
         System.out.println("密码：" + password);
         System.out.println("确认密码：" + confirmPassword);
         System.out.println("性别：" + gender);
 
-
-        return new ModelAndView(" user/changepassword");
+        userService.update(user_id,username,password,phoneNumber,gender);
+        return new ModelAndView("user/changepassword");
     }
     @GetMapping("/reseration")
     public ModelAndView reseration(){
