@@ -16,9 +16,9 @@ public class study_roomController {
     @Autowired
     StudyRoomServiceImpl study_roomService;
 
-    @GetMapping("self_study_room")
+    @GetMapping("self_study_roompage")
     public ModelAndView showdata(){
-        ModelAndView m = new ModelAndView("study_room");
+        ModelAndView m = new ModelAndView("user/study_room");
         try {
             List<StudyRoom> alls = study_roomService.findAll();
             m.addObject("alls",alls);

@@ -106,14 +106,14 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="http://localhost:8881/user/notice">
+                <a class="nav-link" href="http://localhost:8881/self_study_room/user/notice">
                     <i class="mdi mdi-message-text menu-icon"></i>
                     <span class="menu-title">通知</span>
                 </a>
 
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="http://localhost:8881/user/self_study_room">
+                <a class="nav-link" href="http://localhost:8881/self_study_room/user/self_study_roompage">
                     <i class="mdi  mdi-book-open-page-variant menu-icon"></i>
                     <span class="menu-title">自习室选择</span>
                 </a>
@@ -169,6 +169,7 @@
 
     </div>
 
+
 </div>
 
 
@@ -195,9 +196,14 @@
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
 </body>
 <script>
-    function submitForm(){
-
-        document.getElementById("deletenotice").submit();
+    function clearsfrom(event){
+        event.preventDefault(); // 阻止表单的默认提交行为
+        document.getElementById("username").value = "";
+        document.getElementById("phoneNumber").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("confirmPassword").value = "";
+        // document.querySelector('input[name="gender"]:checked').checked = false;
+        // document.getElementById("deletenotice").submit();
     }
 
 </script>

@@ -19,7 +19,7 @@ public class UserController {
     NoticeService NoticeService;
 
 
-    @GetMapping("notice")
+    @GetMapping("/notice")
     public ModelAndView shownotice(){
         ModelAndView m = new ModelAndView("user/user_index");
         try {
@@ -30,11 +30,11 @@ public class UserController {
         }
         return m;
     }
-    @GetMapping("changepassword")
+    @GetMapping("/changepassword")
     public ModelAndView showfavorite(){
         return new ModelAndView("user/changepassword");
     }
-    @GetMapping("changepassworded")
+    @GetMapping("/changepassworded")
     public ModelAndView showfavorite(  @RequestParam("username") String username,
                                        @RequestParam("phoneNumber") String phoneNumber,
                                        @RequestParam("password") String password,
@@ -46,26 +46,20 @@ public class UserController {
         System.out.println("密码：" + password);
         System.out.println("确认密码：" + confirmPassword);
         System.out.println("性别：" + gender);
-//        User user = new User(username,password,confirmPassword,phoneNumber,gender);
-//
 
 
-
-        return new ModelAndView("user/changepassword");
+        return new ModelAndView(" user/changepassword");
     }
-    @GetMapping("reseration")
+    @GetMapping("/reseration")
     public ModelAndView reseration(){
-
         return new ModelAndView("user/reseration");
     }
-    @GetMapping("forum")
+    @GetMapping("/forum")
     public ModelAndView fourm(){
-
         return new ModelAndView("user/forum");
     }
-    @GetMapping("selfforum")
+    @GetMapping("/selfforum")
     public ModelAndView selffourm(){
-
         return new ModelAndView("user/selfforum");
     }
 
