@@ -13,14 +13,54 @@
     <link rel="stylesheet" href="/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/images/favicon.png" />
+    <style>
+        body{
+            margin: 1px;
+            border: 2px;
+        }
+        .container{
+            background-color: #FFFFCC;
+            border: 1px solid black;
+            height: 180px;
+            width: 80%;
+
+        }
+        .title{
+            background-color: #CCFFFF;
+            display: inline-block;
+            margin-left: 25%;
+            font-size: 28px;
+            text-align: center;
+            width: 20%;
+
+        }
+        .Content{
+            background: #FFCCCC;
+            font-size: 20px;
+
+            width: 100%;
+            height: 65%;
+        }
+        .times{
+            float: left;
+        }
+
+        ul li {
+            list-style-type: none;
+
+        }
+
+
+    </style>
+
 </head>
 <body>
 <!-- partial:partials/_navbar.html -->
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex justify-content-center">
         <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-            <a class="navbar-brand brand-logo" href="admin_index.html"><img src="/images/logo.svg" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="admin_index.html"><img src="/images/logo-mini.svg" alt="logo"/></a>
+            <a class="navbar-brand brand-logo" href="user_index.html"><img src="/images/logo.svg" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="user_index.html"><img src="/images/logo-mini.svg" alt="logo"/></a>
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                 <span class="mdi mdi-sort-variant"></span>
             </button>
@@ -66,32 +106,14 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="admin_index.html">
-                    <i class="mdi mdi-home menu-icon"></i>
-                    <span class="menu-title">主页</span>
-                </a>
-
-            </li>
-            <li class="nav-item">
-                <!--                <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">-->
-                <!--                    <i class="mdi mdi-circle-outline menu-icon"></i>-->
-                <!--                    <span class="menu-title">通知</span>-->
-                <!--                    <i class="menu-arrow"></i>-->
-                <!--                </a>-->
-                <!--                <div class="collapse" id="ui-basic">-->
-                <!--                    <ul class="nav flex-column sub-menu">-->
-                <!--                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>-->
-                <!--                        <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>-->
-                <!--                    </ul>-->
-                <!--                </div>-->
-                <a class="nav-link" href="admin_index.html">
+                <a class="nav-link" href="http://localhost:8881/user/notice">
                     <i class="mdi mdi-message-text menu-icon"></i>
                     <span class="menu-title">通知</span>
                 </a>
 
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../pages/forms/basic_elements.html">
+                <a class="nav-link" href="http://localhost:8881/user/self_study_room">
                     <i class="mdi  mdi-book-open-page-variant menu-icon"></i>
                     <span class="menu-title">自习室选择</span>
                 </a>
@@ -105,10 +127,12 @@
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="ui-basic">
+
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/buttons.html">论坛中心</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="../pages/ui-features/typography.html">论坛管理</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/user/forum">论坛中心</a></li>
+                        <li class="nav-item"> <a class="nav-link"  href="http://localhost:8881/user/selfforum">论坛管理</a></li>
                     </ul>
+
                 </div>
 
             </li>
@@ -121,36 +145,53 @@
                 </a>
                 <div class="collapse" id="auth">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="../pages/samples/login.html"> 预约订单 </a></li>
-                        <li class="nav-item"> <a class="nav-link" href="../pages/samples/login-2.html"> 修改密码</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="../pages/samples/register.html"> 收藏座位 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/user/reseration"> 预约订单 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/user/changepassword"> 修改密码</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/user/favorite"> 收藏座位 </a></li>
                         <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
                     </ul>
                 </div>
             </li>
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="documentation/documentation.html">-->
-            <!--                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>-->
-            <!--                    <span class="menu-title">Documentation</span>-->
-            <!--                </a>-->
-            <!--            </li>-->
         </ul>
     </nav>
 
-    <!-- partial -->
+
+
     <div class="main-panel">
-        <textarea></textarea>
-        <!--        <footer class="footer">-->
-        <!--            <div class="d-sm-flex justify-content-center justify-content-sm-between">-->
-        <!--                <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>-->
-        <!--                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard  </a> templates</span>-->
-        <!--            </div>-->
-        <!--        </footer>-->
-        <!-- partial -->
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">收藏的座位</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>自习室</th>
+                                <th>座位号</th>
+                                <th>状态</th>
+                                <th>预定</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="allss: ${alls}">
+                                <td th:text="${allss.getRoom_id()}"></td>
+                                <td th:text="${allss.getSeat_number()}"></td>
+                                <td th:text="${allss.getStatus()}"></td>
+                                <td><a href="http://localhost:8881/user/self_study_room_1"><img src="/images/login/reservation.png "></a></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
-    <!-- main-panel ends -->
+
 </div>
 
 
@@ -176,4 +217,11 @@
 
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
 </body>
+<script>
+    function submitForm(){
+
+        document.getElementById("deletenotice").submit();
+    }
+
+</script>
 </html>
