@@ -34,6 +34,7 @@ public class UserController {
         }
         return m;
     }
+
     @GetMapping("/changepassword")
     public ModelAndView showfavorite(){
         return new ModelAndView("user/changepassword");
@@ -67,8 +68,10 @@ public class UserController {
     public ModelAndView selffourm(){
         return new ModelAndView("user/selfforum");
     }
-
-
+    @GetMapping("/room")
+    public ModelAndView showroom(){
+        return new ModelAndView("user/room");
+    }
 
 
 }

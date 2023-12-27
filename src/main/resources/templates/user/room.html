@@ -18,38 +18,79 @@
             margin: 1px;
             border: 2px;
         }
-        .container{
-            background-color: #FFFFCC;
-            border: 1px solid black;
-            height: 180px;
-            width: 80%;
-
-        }
-        .title{
-            background-color: #CCFFFF;
-            display: inline-block;
-            margin-left: 25%;
-            font-size: 28px;
-            text-align: center;
-            width: 20%;
-
-        }
-        .Content{
-            background: #FFCCCC;
-            font-size: 20px;
-
-            width: 100%;
-            height: 65%;
-        }
-        .times{
-            float: left;
-        }
-
         ul li {
             list-style-type: none;
 
         }
+        .container-fluid {
 
+
+            border-radius: 10px;
+        }
+
+        h3 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        small {
+            font-size: 14px;
+        }
+
+        .col-md-4 img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .select_seat{
+            height: 60%;
+            background-color: pink;
+
+        }
+        .seat {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #000;
+            margin: 5px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+            position: relative; /* 添加相对定位 */
+        }
+
+        .selected {
+            display: inline-block;
+            background-color: #ff0000;
+            color: #fff;
+        }
+
+        .seat-image {
+            width: 40px;
+            height: 40px;
+        }
+
+        .seat-container {
+
+            width: 40px;
+            margin: 38px;
+            display: inline-block;
+            text-align: center;
+        }
 
     </style>
 
@@ -157,29 +198,42 @@
 
 
     <div class="main-panel">
-<!--        <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap;" id="roomlist">-->
-<!--            <li th:each="allas : ${alls}" style="width: 48%; margin: 10px; border: 1px solid #ccc; border-radius: 5px; overflow: hidden;">-->
-<!--                <div>-->
-<!--                    第 <span th:text="${allas.getRoom_id()}"></span> 个自习室<br>-->
-<!--                    自习室简介：<br>  <span th:text="${allas.getRoom_content()}"></span>-->
-<!--                </div>-->
-<!--                <img th:src="${allas.getRoom_picture()}" />-->
-<!--            </li>-->
-<!--        </ul>-->
-        <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap;" id="roomlist">
-            <li th:each="allas : ${alls}" style="width: 48%; margin: 10px; border: 1px solid #ccc; border-radius: 5px; overflow: hidden;">
-                <div>
-                  <span style="font-size: 18px;margin-left: 40%" th:text="${allas.getRoom_id()}"></span> <span style="font-size: 18px">号自习室</span><br>
-                   自习室简介： <span th:text="${allas.getRoom_content()}"></span>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">
+                        h3. Lorem ipsum dolor sit amet.
+                    </h3>
                 </div>
-               <div style="float: right;display: inline-block">
-                   <p style="display: inline-block"> 容量：</p>
-                   <span  style="display: inline-block" id="room_volume_input"  th:text="${allas.getRoom_volume()}"> </span>
-               </div>
-                <img th:src="${allas.getRoom_picture()}" style="width: 100%; height: auto; display: block;">
-            </li>
-        </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <h2> 自习室简介:</h2>
+                    <p id="introduction">
+                     </p>
+                </div>
+                <div class="col-md-4">
+                    <img alt="Bootstrap Image Preview"  style="width:300px;height: 300px;float: right" id="picture" class="img-thumbnail" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                </div>
+            </div>
+        </div>
+        <div class="select_seat">
+
+            <div id="seats" style="text-align: center">
+                <!-- JavaScript 代码将在这里生成座位 -->
+
+            </div>
+            <footer>
+                <input type="datetime-local" id="datetime-input">
+                <button type="button" style="float: right;margin: 5px" class="btn btn-success">确认预约</button>
+            </footer>
+        </div>
     </div>
+
 
 
 </div>
@@ -217,26 +271,63 @@
         // document.querySelector('input[name="gender"]:checked').checked = false;
         // document.getElementById("deletenotice").submit();
     }
-    var roomlist = document.getElementById("roomlist");
-    roomlist.addEventListener("click",function (event){
-        var clickedLi = event.target.closest("li");
 
-        var roomId = clickedLi.querySelector("span").textContent;
-        var roomContent = clickedLi.querySelector("span:last-child").textContent;
-        var roomPicture = clickedLi.querySelector("img").getAttribute("src");
-        var roomVolume = clickedLi.querySelector("#room_volume_input").textContent;
-        console.log(roomVolume)
+        var urlParams = new URLSearchParams(window.location.search);
+        var roomId = urlParams.get("roomId");
+        var roomContent = urlParams.get("roomContent");
+        var roomPicture = urlParams.get("roomPicture");
+        var roomVolume = urlParams.get("roomVolume");
+        // 根据需要使用选中的数据
+        console.log(roomId, roomContent, roomPicture,roomVolume);
+        var picture = document.getElementById("picture")
+        picture.src = roomPicture
 
-        var url = "http://localhost:8881/self_study_room/user/room?roomId=" + encodeURIComponent(roomId) +
-            "&roomContent=" + encodeURIComponent(roomContent) +
-            "&roomPicture=" + encodeURIComponent(roomPicture) +
-            "&roomVolume=" + encodeURIComponent(roomVolume);
 
-        window.location.href = url;
+    var paragraph = document.querySelector("p");
+    paragraph.textContent =    roomContent;
 
-        console.log(roomVolume)
+    var title = document.querySelector("h3");
+    title.textContent = "欢迎来到"+  roomId+"号自习室";
 
-    })
+    var datetimeInput = document.getElementById("datetime-input");
+
+    var selectedSeat = null;
+    var seatsContainer = document.getElementById('seats');
+    for (var i = 1; i <= roomVolume; i++) {
+        var seatContainer = document.createElement('div');
+        seatContainer.className = 'seat-container';
+
+        var seat = document.createElement('div');
+        seat.className = 'seat';
+        seat.textContent = i;
+
+        var seatImage = document.createElement('img');
+        seatImage.className = 'seat-image';
+        seatImage.src = "/images/faces/admin.png"; // 替换为你的图片路径
+
+        seat.addEventListener('click', function() {
+            if (selectedSeat) {
+                // 如果已经有选中的座位，取消其选中状态
+                selectedSeat.classList.remove('selected');
+            }
+
+            // 更新已选座位，并添加选中状态
+            selectedSeat = this;
+            selectedSeat.classList.add('selected');
+        });
+
+        seatContainer.appendChild(seat);
+        seatContainer.appendChild(seatImage); // 将图片添加到座位容器中
+        seatsContainer.appendChild(seatContainer); // 将座位容器添加到座位容器中
+
+
+
+        var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
+
+
+
+
+    }
 
 </script>
 </html>

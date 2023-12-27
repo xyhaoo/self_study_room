@@ -11,8 +11,8 @@ public interface study_roomDao {
     List<StudyRoom> findAll() throws Exception;
 
     //增加记录，供管理员发布新通知
-    @Insert("insert into room(room_id, room_content, room_picture" +
-            "values (#{room_id}, #{room_content}, #{room_picture})")
+    @Insert("insert into room(room_id, room_content, room_picture,room_volume" +
+            "values (#{room_id}, #{room_content}, #{room_picture},#{room_volume})")
     void insert(StudyRoom self_study_room) throws Exception;
 
     //删除记录，供管理员删除通知
