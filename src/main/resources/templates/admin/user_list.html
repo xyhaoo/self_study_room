@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>通知发布</title>
+    <title>Title</title>
     <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
     <!-- endinject -->
@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/images/favicon.png"/>
+
+
 </head>
 <body>
 <!-- partial:partials/_navbar.html -->
@@ -65,6 +67,7 @@
     </div>
 </nav>
 
+
 <div class="container-fluid page-body-wrapper">
     <!-- partial:partials/_sidebar.html -->
     <!-- 左侧树形导航栏 -->
@@ -96,6 +99,7 @@
                 </a>
             </li>
 
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#user_manage" aria-expanded="false"
                    aria-controls="ui-basic">
@@ -106,14 +110,15 @@
                 <div class="collapse" id="user_manage">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_list">通知列表</a>
+                                                href="http://localhost:8881/self_study_room/admin/user_list">用户列表</a>
                         </li>
                         <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_manager">发布通知</a>
+                                                href="http://localhost:8881/self_study_room/admin/user_manager">管理</a>
                         </li>
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#forum_manage" aria-expanded="false"
                    aria-controls="ui-basic">
@@ -137,104 +142,132 @@
     </nav>
 
 
-    <!-- partial -->
-    <!--通知发布栏    -->
+    <!--用户列表    -->
     <div class="main-panel">
+
         <div class="content-wrapper">
-
-            <div class="row">
-                <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">发布通知</h4>
-
-                            <form class="forms-sample" method="post">
-                                <div class="form-group">
-                                    <label for="exampleInputName1">标题</label>
-                                    <input type="text" class="form-control" id="exampleInputName1"
-                                           placeholder="请填写标题" name="notice_title">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleTextarea1">内容</label>
-                                    <textarea class="form-control" id="exampleTextarea1" rows="4"
-                                              placeholder="请填写内容" name="notice_content"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary me-2">发布</button>
-
-                            </form>
-
-                            <!-- 成功的警告框 -->
-                            <div th:if="${status eq '发布成功～'}"
-                                 class="alert alert-success alert-dismissible fade show" role="alert"
-                                 th:text="${status}">
-                                <button  class="btn border-0 p-0 btn-close">
-                                    <i class="mdi mdi-close text-white me-0"></i>
-                                </button>
-                            </div>
-
-                            <!-- 失败的警告框 -->
-                            <div th:if="${status eq '发布失败了，请再次尝试。如果此问题依然存在请联系开发者！'}"
-                                 class="alert alert-danger .alert-dismissible fade show" role="alert"
-                                 th:text="${status}">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-
-                            </div>
-
-                        </div>
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">用户列表</h1>
+                    <div class="table-responsive">
+                        <table id="recent-purchases-listing" class="table">
+                            <thead>
+                            <tr class="table-success">
+                                <th>用户id</th>
+                                <th>用户名</th>
+                                <th>密码</th>
+                                <th>手机号</th>
+                                <th>性别</th>
+                                <th data-sortable="false">管理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user, status : ${search_result}">
+                                <td th:text="${user.user_id}"></td>
+                                <td th:text="${user.user_name}"></td>
+                                <td th:text="${user.password}"></td>
+                                <td th:text="${user.phone_number} ?: 'null'"></td>
+                                <td th:text="${user.sex} ?: 'null'"></td>
+                                <td>
+                                    <button class="btn btn-warning btn-rounded btn-fw"
+                                            data-toggle="modal" th:data-target="'#modal-' + ${status.index}">修改
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
 
+
+        </div>
+        <!-- content-wrapper ends -->
+
+
+        <!--修改用户信息的模态框    -->
+        <!--点击删除，二次确认-->
+        <div th:each="user, status : ${search_result}">
+            <div class="modal fade" th:id="'modal-' + ${status.index}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form method="post" class="forms-sample" action="http://localhost:8881/self_study_room/admin/user_list"
+                          onsubmit="return prepareFormData(this)">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>修改用户数据</h3>
+                                <button class="btn btn-outline-secondary btn-rounded btn-icon" data-dismiss="modal">
+                                    <i class="mdi mdi-close"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="user_id">用户id</label>
+                                    <input type="text" class="form-control" id="user_id"
+                                           th:attr="placeholder=${user.user_id}" th:disabled="true" name="user_id">
+                                    <input type="hidden" th:value="${user.user_id}" name="user_id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_name">用户名</label>
+                                    <input type="text" class="form-control" id="user_name"
+                                           th:attr="placeholder=${user.user_name}" name="user_name">
+                                    <input type="hidden" th:value="${user.user_name}" name="user_name_hidden">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">用户密码</label>
+                                    <input type="text" class="form-control" id="password"
+                                           th:attr="placeholder=${user.password}" name="password" >
+                                    <input type="hidden" th:value="${user.password}" name="password_hidden">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone_number">电话号码</label>
+                                    <input type="text" class="form-control" id="phone_number"
+                                           th:attr="placeholder=${user.phone_number} ? ${user.phone_number} : 'null'" name="phone_number">
+                                    <input type="hidden" th:value="${user.phone_number}" name="phone_number_hidden">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sex">性别</label>
+                                    <input type="text" class="form-control" id="sex"
+                                           th:attr="placeholder=${user.sex}" th:disabled="true" name="sex">
+                                    <input type="hidden" th:value="${user.sex}" name="sex">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-light" data-dismiss="modal">取消</button>
+                                <button class="btn btn-danger" type="submit"
+                                        name="choice" value="delete">删除用户</button>
+                                <button class="btn btn-warning" type="submit"
+                                        name="choice" value="modify">修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
 
 
-    <!--发布后的状态回显        -->
-    <div id="toastContainer" class="position-fixed bottom-0 right-0 p-3">
-        <!-- 获取后端传递的发布状态 -->
-        <div th:if="${status != null}" th:text="${status}" class="d-none" id="publishStatus"></div>
-    </div>
     <!-- main-panel ends -->
 </div>
 
+<!--检查模态框中提交的数据是否被修改-->
+<!--如果管理员不修改，则默认提交原来的数据，如果修改，则提交新数据-->
+<script>
+    function prepareFormData(form) {
+        // 遍历表单中的每个 input 元素
+        for (var i = 0; i < form.elements.length; i++) {
+            var input = form.elements[i];
 
-<script th:inline="javascript">
-    $(document).ready(function () {
-        var status = $('#publishStatus').text(); // 获取发布状态
-
-        if (status !== '') {
-            var toastContainer = $('#toastContainer');
-
-
-            // 生成 Toasts 弹框
-            var toastHTML = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">' +
-                '<div class="toast-header">' +
-                '<strong class="mr-auto">发布状态</strong>' +
-                '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">' +
-                '<span aria-hidden="true">&times;</span>' +
-                '</button>' +
-                '</div>' +
-                '<div class="toast-body">' +
-                status +
-                '</div>' +
-                '</div>';
-
-            toastContainer.append(toastHTML);
-
-            // 监听 Toasts 弹框关闭动作
-            $('.toast').on('hidden.bs.toast', function () {
-                // 执行重定向操作
-                window.location.href = 'localhost:8080/self_study_room/admin/notice'; // 替换成你的重定向 URL
-            });
-
-            // 显示 Toasts 弹框
-            $('.toast').toast('show');
+            // 如果 input 的值为空，且有 placeholder 属性，则将 placeholder 的值作为该 input 的值
+            if (!input.value && input.hasAttribute('placeholder')) {
+                input.value = input.getAttribute('placeholder');
+            }
         }
-    });
-</script>
 
+        return true; // 继续提交表单
+    }
+</script>
 
 <!-- plugins:js -->
 <script src="/vendors/base/vendor.bundle.base.js"></script>
@@ -254,7 +287,15 @@
 <script src="/js/data-table.js"></script>
 <script src="/js/jquery.dataTables.js"></script>
 <script src="/js/dataTables.bootstrap4.js"></script>
+
+<!-- 引入 jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- 引入 Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<!-- 引入 Bootstrap JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- End custom js for this page-->
+
 
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
 </body>

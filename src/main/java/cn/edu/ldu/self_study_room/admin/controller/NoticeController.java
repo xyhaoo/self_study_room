@@ -32,10 +32,18 @@ public class NoticeController {
         //插入的通知记录，其id是现有通知中id最大值+1，如果当前没有通知，其值为1
         try {
             List<Notice> notices = noticeService.findAll();
-            Optional<Integer> maxNoticeId = notices.stream()
-                    .map(notice -> Integer.parseInt(notice.getNotice_id()))
-                    .max(Integer::compareTo);
-            notice_id = maxNoticeId.map(Object::toString).orElse("1");
+            int maxId = 0;
+            for (Notice notice : notices) {
+                int currentId = Integer.parseInt(notice.getNotice_id());
+                if (currentId > maxId) {
+                    maxId = currentId;
+                }
+            }
+            if (notices.isEmpty()) {
+                notice_id = "1";
+            } else {
+                notice_id = String.valueOf(maxId + 1);
+            }
         }catch (Exception e){
             //findAll方法异常，出现此类型的通知id时，应该修正findAll
             Random random = new Random();
@@ -46,6 +54,10 @@ public class NoticeController {
             }
             notice_id = sb.toString();
         }
+
+        System.out.println(notice_id);
+        System.out.println(notice_title);
+        System.out.println(notice_content);
 
         LocalDateTime currentDateTime = LocalDateTime.now();
         Timestamp now = Timestamp.valueOf(currentDateTime);

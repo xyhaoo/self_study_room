@@ -1,6 +1,6 @@
 package cn.edu.ldu.self_study_room.service.impl;
 
-import cn.edu.ldu.self_study_room.dao.userDao;
+import cn.edu.ldu.self_study_room.dao.UserDao;
 import cn.edu.ldu.self_study_room.entity.User;
 import cn.edu.ldu.self_study_room.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    userDao userDao;
+    private UserDao userDao;
 
 
     @Override

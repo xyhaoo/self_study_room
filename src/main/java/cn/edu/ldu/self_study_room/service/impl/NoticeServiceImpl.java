@@ -17,9 +17,6 @@ public class NoticeServiceImpl implements NoticeService {
     //查询所有记录，供用户点击通知页面时全部展示
     @Override
     public List<Notice> findAll() throws Exception {
-        System.out.println(noticeDao.findAll());
-        for (Object i : noticeDao.findAll())
-            System.out.println(666);
         return noticeDao.findAll();
     }
 
