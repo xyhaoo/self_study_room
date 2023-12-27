@@ -15,4 +15,20 @@ public class FavoritesServiceImpl implements favoritesService {
     public List<Favorites> findAll() throws Exception {
         return favoriteDao.findAll();
     }
+
+    @Override
+    public void insert(Favorites favorites) {
+        try {
+            favoriteDao.insert(favorites);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String findStatus(int room_id,int seat_number) throws Exception {
+        return favoriteDao.findStatus(room_id,seat_number);
+    }
+
+
 }

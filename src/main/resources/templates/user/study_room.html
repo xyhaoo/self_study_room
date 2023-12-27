@@ -49,7 +49,12 @@
             list-style-type: none;
 
         }
-
+        h4{
+            display: inline;
+        }
+        h5{
+            display: inline;
+        }
 
     </style>
 
@@ -156,7 +161,7 @@
     </nav>
 
 
-    <div class="main-panel">
+    <div class="main-panel" style="display: inline-block"    >
 <!--        <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap;" id="roomlist">-->
 <!--            <li th:each="allas : ${alls}" style="width: 48%; margin: 10px; border: 1px solid #ccc; border-radius: 5px; overflow: hidden;">-->
 <!--                <div>-->
@@ -166,19 +171,49 @@
 <!--                <img th:src="${allas.getRoom_picture()}" />-->
 <!--            </li>-->
 <!--        </ul>-->
-        <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap;" id="roomlist">
-            <li th:each="allas : ${alls}" style="width: 48%; margin: 10px; border: 1px solid #ccc; border-radius: 5px; overflow: hidden;">
-                <div>
-                  <span style="font-size: 18px;margin-left: 40%" th:text="${allas.getRoom_id()}"></span> <span style="font-size: 18px">号自习室</span><br>
-                   自习室简介： <span th:text="${allas.getRoom_content()}"></span>
+<!--        <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap;" id="roomlist">-->
+<!--            <li th:each="allas : ${alls}" style="width: 48%; margin: 10px; border: 1px solid #ccc; border-radius: 5px; overflow: hidden;">-->
+<!--                <div>-->
+<!--                  <span style="font-size: 18px;margin-left: 40%" th:text="${allas.getRoom_id()}"></span> <span style="font-size: 18px">号自习室</span><br>-->
+<!--                   自习室简介： <span th:text="${allas.getRoom_content()}"></span>-->
+<!--                </div>-->
+<!--               <div style="float: right;display: inline-block">-->
+<!--                   <p style="display: inline-block"> 容量：</p>-->
+<!--                   <span  style="display: inline-block" id="room_volume_input"  th:text="${allas.getRoom_volume()}"> </span>-->
+<!--               </div>-->
+<!--                <img th:src="${allas.getRoom_picture()}" style="width: 100%; height: auto; display: block;">-->
+<!--            </li>-->
+<!--        </ul>-->
+
+<!--        <div  th:each="allas : ${alls}"   style="display: inline-block;margin: 24px;margin-left: 50px"  >-->
+<!--            <div id="roomlist">-->
+
+<!--                <div class="card" style="width: 18rem;" >-->
+<!--                    <img th:src="${allas.getRoom_picture()}" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title" th:text="${allas.getRoom_id()}"> </h5> <h5 class="card-title"  > 号自习室</h5><br>-->
+<!--                        <h4>简介：</h4>  <p class="card-text" style="display: inline"  th:text="${allas.getRoom_content()}"></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <input type="hidden" id="room_volume_input" th:value="${allas.getRoom_volume()}">-->
+
+<!--            </div>-->
+
+<!--        </div>-->
+        <div th:each="allas : ${alls}" style="display: inline-block; margin: 24px; margin-left: 50px;">
+            <div class="card" style="width: 18rem;">
+                <img th:src="${allas.getRoom_picture()}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${allas.getRoom_id()}"> </h5>
+                    <h5 class="card-title"> 号自习室</h5><br>
+                    <h4>简介：</h4>
+                    <p class="card-text" style="display: inline" th:text="${allas.getRoom_content()}"></p>
                 </div>
-               <div style="float: right;display: inline-block">
-                   <p style="display: inline-block"> 容量：</p>
-                   <span  style="display: inline-block" id="room_volume_input"  th:text="${allas.getRoom_volume()}"> </span>
-               </div>
-                <img th:src="${allas.getRoom_picture()}" style="width: 100%; height: auto; display: block;">
-            </li>
-        </ul>
+                <input type="hidden" th:id="'room_volume_input_' + ${allas.getRoom_id()}" th:value="${allas.getRoom_volume()}">
+            </div>
+        </div>
+
+
     </div>
 
 
@@ -208,35 +243,48 @@
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
 </body>
 <script>
-    function clearsfrom(event){
-        event.preventDefault(); // 阻止表单的默认提交行为
-        document.getElementById("username").value = "";
-        document.getElementById("phoneNumber").value = "";
-        document.getElementById("password").value = "";
-        document.getElementById("confirmPassword").value = "";
-        // document.querySelector('input[name="gender"]:checked').checked = false;
-        // document.getElementById("deletenotice").submit();
-    }
-    var roomlist = document.getElementById("roomlist");
-    roomlist.addEventListener("click",function (event){
-        var clickedLi = event.target.closest("li");
 
-        var roomId = clickedLi.querySelector("span").textContent;
-        var roomContent = clickedLi.querySelector("span:last-child").textContent;
-        var roomPicture = clickedLi.querySelector("img").getAttribute("src");
-        var roomVolume = clickedLi.querySelector("#room_volume_input").textContent;
-        console.log(roomVolume)
+    // var roomlist = document.getElementById("roomlist");
+    // roomlist.addEventListener("click",function (event){
+    //     alert("22")
+    //     var clickedLi = event.target.closest("li");
+    //
+    //     var roomVolume = document.getElementById("room_volume_input").value;
+    //     // var roomVolume = clickedLi.querySelector("#room_volume_input").textContent;
+    //     var roomId = roomlist.querySelector(".card-title").textContent;
+    //     var roomContent = roomlist.querySelector(".card-text").textContent;
+    //     var roomPicture = roomlist.querySelector(".card-img-top").getAttribute("src");
+    //     console.log(roomVolume)
+    //
+    //     var url = "http://localhost:8881/self_study_room/user/room?roomId=" + encodeURIComponent(roomId) +
+    //         "&roomContent=" + encodeURIComponent(roomContent) +
+    //         "&roomPicture=" + encodeURIComponent(roomPicture) +
+    //         "&roomVolume=" + encodeURIComponent(roomVolume);
+    //
+    //     window.location.href = url;
+    //
+    //     console.log(roomVolume)
+    //
+    // })
 
-        var url = "http://localhost:8881/self_study_room/user/room?roomId=" + encodeURIComponent(roomId) +
-            "&roomContent=" + encodeURIComponent(roomContent) +
-            "&roomPicture=" + encodeURIComponent(roomPicture) +
-            "&roomVolume=" + encodeURIComponent(roomVolume);
+    var roomList = document.querySelectorAll(".card");
+    roomList.forEach(function(room) {
+        room.addEventListener("click", function(event) {
+            var clickedRoom = event.target.closest(".card");
 
-        window.location.href = url;
+            var roomId = clickedRoom.querySelector(".card-title").textContent;
+            var roomContent = clickedRoom.querySelector(".card-text").textContent;
+            var roomPicture = clickedRoom.querySelector(".card-img-top").getAttribute("src");
+            var roomVolume = clickedRoom.querySelector("#room_volume_input_" + roomId).value;
 
-        console.log(roomVolume)
+            var url = "http://localhost:8881/self_study_room/user/room?roomId=" + encodeURIComponent(roomId) +
+                "&roomContent=" + encodeURIComponent(roomContent) +
+                "&roomPicture=" + encodeURIComponent(roomPicture) +
+                "&roomVolume=" + encodeURIComponent(roomVolume);
 
-    })
+            window.location.href = url;
+        });
+    });
 
 </script>
 </html>

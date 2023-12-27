@@ -157,8 +157,11 @@
 
 
 
-    <div class="main-panel">
-        <div class="col-lg-6 grid-margin stretch-card">
+
+
+
+
+        <div class="col-lg-6 grid-margin stretch-card" style="margin: 0 auto">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">收藏的座位</h4>
@@ -178,11 +181,17 @@
                                 <td th:text="${allss.getRoom_id()}"></td>
                                 <td th:text="${allss.getSeat_number()}"></td>
                                 <td th:text="${allss.getStatus()}"></td>
-                                <td><a href="http://localhost:8881/user/self_study_room_1"><img src="/images/login/reservation.png "></a></td>
+<!--                                <td><a href="#" onclick="getInfo('${allss.getRoom_id()}', '${allss.getSeat_number()}')"><img src="/images/login/reservation.png"></a></td>-->
+                                <td><a href="http://localhost:8881/self_study_room/user/self_study_roompage"><img src="/images/login/reservation.png "></a></td>
+<!--                                <td>      <button type="button" class="btn btn-success btn-rounded btn-icon">-->
+<!--                                    <i class="mdi mdi-map-marker"></i>-->
+<!--                                </button></td>-->
+
                             </tr>
 
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

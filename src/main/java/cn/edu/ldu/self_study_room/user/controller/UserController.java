@@ -1,7 +1,9 @@
 package cn.edu.ldu.self_study_room.user.controller;
 
 import cn.edu.ldu.self_study_room.entity.Notice;
+import cn.edu.ldu.self_study_room.entity.Reservation;
 import cn.edu.ldu.self_study_room.service.NoticeService;
+import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -21,7 +26,8 @@ public class UserController {
     NoticeService NoticeService;
     @Autowired
     UserServiceImpl userService;
-
+    @Autowired
+    ReservationServiceImpl reservationService;
 
     @GetMapping("/notice")
     public ModelAndView shownotice(){
@@ -56,9 +62,50 @@ public class UserController {
         userService.update(user_id,username,password,phoneNumber,gender);
         return new ModelAndView("user/changepassword");
     }
+    @GetMapping(value = "/reseration", params = {"datetime", "roomId", "seatNumber"})
+    public ModelAndView reseration(@RequestParam("datetime")   String datetime,
+                                   @RequestParam("roomId") int roomId,
+                                   @RequestParam("seatNumber") int seatNumber,HttpSession session) {
+        // 在这里处理接收到的参数
+        // 可以将参数存储到数据库或进行其他业务逻辑处理
+        // 然后返回相应的ModelAndView
+
+        ModelAndView modelAndView = new ModelAndView("user/reseration");
+        // 进行其他操作
+        String user_id = (String) session.getAttribute("user_id");
+        System.out.println(user_id);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Date datetimes;
+        try {
+            datetimes = dateFormat.parse(datetime);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+       reservationService.insert(new Reservation(user_id,roomId,seatNumber,datetimes));
+        List<Reservation> search_result;
+        try {
+            search_result = reservationService.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        modelAndView.addObject("search_result",search_result);
+        return modelAndView;
+    }
+
     @GetMapping("/reseration")
-    public ModelAndView reseration(){
-        return new ModelAndView("user/reseration");
+    public ModelAndView reservationWithoutParams(HttpSession session) {
+        // 处理不带参数的逻辑
+        // ...
+        ModelAndView modelAndView = new ModelAndView("user/reseration");
+        List<Reservation> search_result;
+        try {
+            search_result = reservationService.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        modelAndView.addObject("search_result",search_result);
+
+        return modelAndView;
     }
     @GetMapping("/forum")
     public ModelAndView fourm(){

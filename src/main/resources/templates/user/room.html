@@ -228,8 +228,15 @@
 
             </div>
             <footer>
-                <input type="datetime-local" id="datetime-input">
-                <button type="button" style="float: right;margin: 5px" class="btn btn-success">确认预约</button>
+                <form action="/self_study_room/user/reseration"  >
+                    <!-- 其他表单字段 -->
+                    <input type="datetime-local" name="datetime" id="datetime-input">
+                    <input  type="hidden" name="roomId" id="roomid" >
+                    <input  type="hidden" name="seatNumber" id="seat-number">
+
+                    <button type="submit" style="float: right;margin: 5px" class="btn btn-success">确认预约</button>
+
+                </form>
             </footer>
         </div>
     </div>
@@ -283,6 +290,7 @@
         picture.src = roomPicture
 
 
+
     var paragraph = document.querySelector("p");
     paragraph.textContent =    roomContent;
 
@@ -292,6 +300,7 @@
     var datetimeInput = document.getElementById("datetime-input");
 
     var selectedSeat = null;
+    var selectnumber = 0;
     var seatsContainer = document.getElementById('seats');
     for (var i = 1; i <= roomVolume; i++) {
         var seatContainer = document.createElement('div');
@@ -313,7 +322,10 @@
 
             // 更新已选座位，并添加选中状态
             selectedSeat = this;
+            selectnumber = parseInt(selectedSeat.textContent);
+            console.log(selectnumber + "   ")
             selectedSeat.classList.add('selected');
+            document.getElementById('seat-number').value = selectnumber;
         });
 
         seatContainer.appendChild(seat);
@@ -324,7 +336,7 @@
 
         var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
 
-
+        document.getElementById('roomid').value = roomId;
 
 
     }
