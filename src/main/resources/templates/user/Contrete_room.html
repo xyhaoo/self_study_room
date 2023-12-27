@@ -58,7 +58,7 @@
         }
         .select_seat{
             height: 60%;
-            background-color: pink;
+
 
         }
         .seat {
@@ -221,23 +221,26 @@
                 </div>
             </div>
         </div>
-        <div class="select_seat">
+        <div class="select_seat" style="width: 100%;margin: 0 auto">
 
-            <div id="seats" style="text-align: center">
+
+            <div id="seats" style="text-align: center;width: 100%    ">
                 <!-- JavaScript 代码将在这里生成座位 -->
 
             </div>
-            <footer>
-                <form action="/self_study_room/user/reseration"  >
-                    <!-- 其他表单字段 -->
-                    <input type="datetime-local" name="datetime" id="datetime-input">
-                    <input  type="hidden" name="roomId" id="roomid" >
-                    <input  type="hidden" name="seatNumber" id="seat-number">
 
-                    <button type="submit" style="float: right;margin: 5px" class="btn btn-success">确认预约</button>
+                <form action="/self_study_room/user/reseration" style="text-align: right;">
+                    <div class="form-group" style="display: inline-block;">
+                        <label style="font-size: 28px" for="datetime-input">请选择日期和时间：</label>
+                        <input type="datetime-local" name="datetime" id="datetime-input" class="form-control" style="display: inline-block; width: auto;">
+                    </div>
 
+                    <input type="hidden" name="roomId" id="roomid">
+                    <input type="hidden" name="seatNumber" id="seat-number">
+
+                    <button type="submit" class="btn btn-success" style="float: right; margin: 5px;">确认预约</button>
                 </form>
-            </footer>
+
         </div>
     </div>
 
@@ -299,6 +302,7 @@
 
     var datetimeInput = document.getElementById("datetime-input");
 
+
     var selectedSeat = null;
     var selectnumber = 0;
     var seatsContainer = document.getElementById('seats');
@@ -306,40 +310,77 @@
         var seatContainer = document.createElement('div');
         seatContainer.className = 'seat-container';
 
-        var seat = document.createElement('div');
-        seat.className = 'seat';
-        seat.textContent = i;
-
         var seatImage = document.createElement('img');
         seatImage.className = 'seat-image';
-        seatImage.src = "/images/faces/admin.png"; // 替换为你的图片路径
+        seatImage.src = "/images/faces/unseat.png"; // 替换为你的图片路径
+        seatImage.alt = i; // 将 alt 属性设置为座位号码
+        seatImage.setAttribute('data-seat-number', i); // 添加 data-seat-number 属性
 
-        seat.addEventListener('click', function() {
+        seatImage.addEventListener('click', function() {
             if (selectedSeat) {
                 // 如果已经有选中的座位，取消其选中状态
-                selectedSeat.classList.remove('selected');
+                selectedSeat.src = "/images/faces/unseat.png";
             }
 
             // 更新已选座位，并添加选中状态
             selectedSeat = this;
-            selectnumber = parseInt(selectedSeat.textContent);
+            selectnumber = parseInt(selectedSeat.getAttribute('data-seat-number'));
             console.log(selectnumber + "   ")
-            selectedSeat.classList.add('selected');
+            selectedSeat.src = "/images/faces/site.png"; // 将图片替换为已选座位的图片
             document.getElementById('seat-number').value = selectnumber;
         });
 
-        seatContainer.appendChild(seat);
-        seatContainer.appendChild(seatImage); // 将图片添加到座位容器中
-        seatsContainer.appendChild(seatContainer); // 将座位容器添加到座位容器中
+        seatContainer.appendChild(seatImage);
 
+        // 创建显示座位号码的 div 元素
+        var seatNumberDiv = document.createElement('div');
+        seatNumberDiv.className = 'seat-number';
+        seatNumberDiv.textContent = i; // 设置座位号码
+        seatContainer.appendChild(seatNumberDiv);
 
+        seatsContainer.appendChild(seatContainer);
 
         var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
-
         document.getElementById('roomid').value = roomId;
-
-
     }
+
+    // var selectedSeat = null;
+    // var selectnumber = 0;
+    // var seatsContainer = document.getElementById('seats');
+    // for (var i = 1; i <= roomVolume; i++) {
+    //     var seatContainer = document.createElement('div');
+    //     seatContainer.className = 'seat-container';
+    //
+    //     var seat = document.createElement('div');
+    //     seat.className = 'seat';
+    //     seat.textContent = i;
+    //
+    //     var seatImage = document.createElement('img');
+    //     seatImage.className = 'seat-image';
+    //     seatImage.src = "/images/faces/unseat.png"; // 替换为你的图片路径
+    //
+    //     seat.addEventListener('click', function() {
+    //         if (selectedSeat) {
+    //             // 如果已经有选中的座位，取消其选中状态
+    //             selectedSeat.classList.remove('selected');
+    //         }
+    //
+    //         // 更新已选座位，并添加选中状态
+    //         selectedSeat = this;
+    //         selectnumber = parseInt(selectedSeat.textContent);
+    //         console.log(selectnumber + "   ")
+    //         selectedSeat.classList.add('selected');
+    //         document.getElementById('seat-number').value = selectnumber;
+    //     });
+    //
+    //     seatContainer.appendChild(seat);
+    //     seatContainer.appendChild(seatImage); // 将图片添加到座位容器中
+    //     seatsContainer.appendChild(seatContainer); // 将座位容器添加到座位容器中
+    //
+    //     var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
+    //     document.getElementById('roomid').value = roomId;
+    //
+    // }
 
 </script>
 </html>

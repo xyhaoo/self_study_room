@@ -115,9 +115,10 @@ public class UserController {
     public ModelAndView selffourm(){
         return new ModelAndView("user/selfforum");
     }
-    @GetMapping("/room")
-    public ModelAndView showroom(){
-        return new ModelAndView("user/room");
+    @GetMapping("/Contreteroom")
+    public ModelAndView showroom( ){
+
+        return new ModelAndView("user/Contrete_room");
     }
 
 

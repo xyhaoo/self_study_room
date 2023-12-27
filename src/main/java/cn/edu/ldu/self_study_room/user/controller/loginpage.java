@@ -32,8 +32,10 @@ public class loginpage {
         System.out.println("Username: " + user_id);
         System.out.println("Password: " + password);
 
-        if(user_id.equals("admin") && password.equals("123456"))
+        if(user_id.equals("admin") && password.equals("123456")){
             return new ModelAndView("admin/admin_index");
+        }
+
 
         try {
             for(User i : userService.findAll()){

@@ -277,7 +277,7 @@
             var roomPicture = clickedRoom.querySelector(".card-img-top").getAttribute("src");
             var roomVolume = clickedRoom.querySelector("#room_volume_input_" + roomId).value;
 
-            var url = "http://localhost:8881/self_study_room/user/room?roomId=" + encodeURIComponent(roomId) +
+            var url = "http://localhost:8881/self_study_room/user/Contreteroom?roomId=" + encodeURIComponent(roomId) +
                 "&roomContent=" + encodeURIComponent(roomContent) +
                 "&roomPicture=" + encodeURIComponent(roomPicture) +
                 "&roomVolume=" + encodeURIComponent(roomVolume);
