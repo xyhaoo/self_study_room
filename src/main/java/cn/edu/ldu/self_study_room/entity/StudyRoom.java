@@ -11,4 +11,5 @@ public class StudyRoom {
     int room_id;
     String room_picture;
     String room_content;
+    int room_volume;
 }

@@ -12,6 +12,8 @@ public class StudyRoomServiceImpl implements study_roomDao {
     private study_roomDao study_roomDao;
     @Override
     public List<StudyRoom> findAll() throws Exception {
+        for (StudyRoom i : study_roomDao.findAll())
+            System.out.println(i);
         return study_roomDao.findAll();
     }
 

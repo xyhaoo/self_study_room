@@ -18,38 +18,79 @@
             margin: 1px;
             border: 2px;
         }
-        .container{
-            background-color: #FFFFCC;
-            border: 1px solid black;
-            height: 180px;
-            width: 80%;
-
-        }
-        .title{
-            background-color: #CCFFFF;
-            display: inline-block;
-            margin-left: 25%;
-            font-size: 28px;
-            text-align: center;
-            width: 20%;
-
-        }
-        .Content{
-            background: #FFCCCC;
-            font-size: 20px;
-
-            width: 100%;
-            height: 65%;
-        }
-        .times{
-            float: left;
-        }
-
         ul li {
             list-style-type: none;
 
         }
+        .container-fluid {
 
+
+            border-radius: 10px;
+        }
+
+        h3 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        small {
+            font-size: 14px;
+        }
+
+        .col-md-4 img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .select_seat{
+            height: 60%;
+            background-color: pink;
+
+        }
+        .seat {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #000;
+            margin: 5px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+            position: relative; /* 添加相对定位 */
+        }
+
+        .selected {
+            display: inline-block;
+            background-color: #ff0000;
+            color: #fff;
+        }
+
+        .seat-image {
+            width: 40px;
+            height: 40px;
+        }
+
+        .seat-container {
+
+            width: 40px;
+            margin: 38px;
+            display: inline-block;
+            text-align: center;
+        }
 
     </style>
 
@@ -156,67 +197,41 @@
     </nav>
 
 
-
     <div class="main-panel">
-        <div class="col-md-6 grid-margin stretch-card" style="margin: 0 auto"s>
-            <div class="card" >
-                <div class="card-body">
-                    <h4 class="card-title">个人信息修改</h4>
-
-                    <form class="forms-sample" action="/self_study_room/user/changepassworded">
-                        <div class="form-group row">
-                            <label for="username" class="col-sm-3 col-form-label">用户名</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="username" class="form-control" id="username" placeholder="输入用户名">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="phoneNumber" class="col-sm-3 col-form-label">手机号</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="phoneNumber" class="form-control" id="phoneNumber" placeholder="输入手机号">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-sm-3 col-form-label">密码</label>
-                            <div class="col-sm-9">
-                                <input type="password" name="password" class="form-control" id="password" placeholder="输入密码">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="confirmPassword"  class="col-sm-3 col-form-label">重新输入密码</label>
-                            <div class="col-sm-9">
-                                <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="重新输入密码">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">性别</label>
-                            <div class="col-sm-9" style="display: flex; justify-content: center; align-items: center;">
-                                <div style="width: 50%; text-align: center;">
-                                    <label class="form-check-label">
-                                        <input type="radio"  class="form-check-input" name="gender" value="male">
-                                        男
-                                    </label>
-                                </div>
-                                <div style="width: 50%; text-align: center;">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="gender" value="female">
-                                        女
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary me-2">Submit</button>
-                        <button class="btn btn-light" onclick="clearsfrom(event)">Cancel</button>
-                    </form>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">
+                        h3. Lorem ipsum dolor sit amet.
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <h2> 自习室简介:</h2>
+                    <p id="introduction">
+                     </p>
+                </div>
+                <div class="col-md-4">
+                    <img alt="Bootstrap Image Preview"  style="width:300px;height: 300px;float: right" id="picture" class="img-thumbnail" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                 </div>
             </div>
         </div>
+        <div class="select_seat">
 
+            <div id="seats" style="text-align: center">
+                <!-- JavaScript 代码将在这里生成座位 -->
 
+            </div>
+            <footer>
+                <input type="datetime-local" id="datetime-input">
+                <button type="button" style="float: right;margin: 5px" class="btn btn-success">确认预约</button>
+            </footer>
+        </div>
     </div>
 
 
@@ -253,8 +268,65 @@
         document.getElementById("phoneNumber").value = "";
         document.getElementById("password").value = "";
         document.getElementById("confirmPassword").value = "";
-       // document.querySelector('input[name="gender"]:checked').checked = false;
+        // document.querySelector('input[name="gender"]:checked').checked = false;
         // document.getElementById("deletenotice").submit();
+    }
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var roomId = urlParams.get("roomId");
+        var roomContent = urlParams.get("roomContent");
+        var roomPicture = urlParams.get("roomPicture");
+        var roomVolume = urlParams.get("roomVolume");
+        // 根据需要使用选中的数据
+        console.log(roomId, roomContent, roomPicture,roomVolume);
+        var picture = document.getElementById("picture")
+        picture.src = roomPicture
+
+
+    var paragraph = document.querySelector("p");
+    paragraph.textContent =    roomContent;
+
+    var title = document.querySelector("h3");
+    title.textContent = "欢迎来到"+  roomId+"号自习室";
+
+    var datetimeInput = document.getElementById("datetime-input");
+
+    var selectedSeat = null;
+    var seatsContainer = document.getElementById('seats');
+    for (var i = 1; i <= roomVolume; i++) {
+        var seatContainer = document.createElement('div');
+        seatContainer.className = 'seat-container';
+
+        var seat = document.createElement('div');
+        seat.className = 'seat';
+        seat.textContent = i;
+
+        var seatImage = document.createElement('img');
+        seatImage.className = 'seat-image';
+        seatImage.src = "/images/faces/admin.png"; // 替换为你的图片路径
+
+        seat.addEventListener('click', function() {
+            if (selectedSeat) {
+                // 如果已经有选中的座位，取消其选中状态
+                selectedSeat.classList.remove('selected');
+            }
+
+            // 更新已选座位，并添加选中状态
+            selectedSeat = this;
+            selectedSeat.classList.add('selected');
+        });
+
+        seatContainer.appendChild(seat);
+        seatContainer.appendChild(seatImage); // 将图片添加到座位容器中
+        seatsContainer.appendChild(seatContainer); // 将座位容器添加到座位容器中
+
+
+
+        var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
+
+
+
+
     }
 
 </script>
