@@ -26,6 +26,9 @@ public interface NoticeDao {
                @Param("notice_title") String notice_title,
                @Param("notice_content") String notice_content);
 
+
+    @Select("select * from notice where notice_title like ${notice_title}")
+    List<Notice> findbutitle(@Param("notice_title")String notice_title) throws Exception;
     //理应按照日期排序，最近的帖子在最前面，暂时不考虑供用户查找
 
 }

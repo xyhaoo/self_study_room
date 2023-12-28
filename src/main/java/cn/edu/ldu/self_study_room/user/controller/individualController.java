@@ -105,7 +105,7 @@ public class individualController {
             reservationService.delete(userId,roomId,seatNumber);
             System.out.println("删除完成");
 
-            List<Reservation> search_result = reservationService.findAll();
+            List<Reservation> search_result = reservationService.findAll(userId);
             session.setAttribute("seatList",search_result);
             Integer page_size = (search_result.size() % 4 == 0) ? search_result.size() / 4 : (search_result.size() / 4) + 1;
             session.setAttribute("page_size",page_size);

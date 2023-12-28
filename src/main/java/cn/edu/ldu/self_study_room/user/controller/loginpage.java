@@ -35,7 +35,7 @@ public class loginpage {
     public ModelAndView loading(@RequestParam("user_id") String user_id, @RequestParam("password") String password, HttpSession session) {
         List<Reservation> search_result;
         try {
-            search_result = reservationService.findAll();
+            search_result = reservationService.findAll(user_id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

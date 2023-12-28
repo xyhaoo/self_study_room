@@ -91,7 +91,7 @@ public class UserController {
         }
 //        //修改状态
       //  seatService.insert(roomId,seatNumber,"2");
-        seatService.update(roomId,seatNumber,"2");
+        seatService.update(seatNumber,"2");
        reservationService.insert(new Reservation(user_id,roomId,seatNumber,datetimes));
 
 

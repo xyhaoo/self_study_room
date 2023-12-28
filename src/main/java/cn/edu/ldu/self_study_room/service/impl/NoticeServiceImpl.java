@@ -19,6 +19,12 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeDao.findAll();
     }
 
+
+    @Override
+    public List<Notice> findbutitile(String notice_title) throws Exception {
+        return null;
+    }
+
 //    @Override
 //    public List<Notice> findbutitile(String notice_titile) throws Exception {
 //        return null;
