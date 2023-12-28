@@ -2,8 +2,10 @@ package cn.edu.ldu.self_study_room.user.controller;
 
 import cn.edu.ldu.self_study_room.entity.Notice;
 import cn.edu.ldu.self_study_room.entity.Reservation;
+import cn.edu.ldu.self_study_room.entity.Seat;
 import cn.edu.ldu.self_study_room.service.NoticeService;
 import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
+import cn.edu.ldu.self_study_room.service.impl.StudyRoomServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +31,8 @@ public class UserController {
     UserServiceImpl userService;
     @Autowired
     ReservationServiceImpl reservationService;
+    @Autowired
+    StudyRoomServiceImpl studyRoomService;
 
     @GetMapping("/notice")
     public ModelAndView shownotice(){
@@ -71,6 +76,8 @@ public class UserController {
         // 然后返回相应的ModelAndView
 
         ModelAndView modelAndView = new ModelAndView("user/reseration");
+
+
         // 进行其他操作
         String user_id = (String) session.getAttribute("user_id");
         System.out.println(user_id);
@@ -88,25 +95,54 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        modelAndView.addObject("search_result",search_result);
+
+
+
+        session.setAttribute("seatList",search_result);
+        Integer page_size = (search_result.size() % 4 == 0) ? search_result.size() / 4 : (search_result.size() / 4) + 1;
+        session.setAttribute("page_size",page_size);
+
+        modelAndView.addObject("page_size",page_size);
+        List<Reservation> four_seat=new ArrayList<>();
+        if(1!=page_size){
+            four_seat=search_result.subList(1*4-4,1*4);
+        }else{
+            four_seat=search_result.subList(1*4-4,search_result.size());
+        }
+
+
+        modelAndView.addObject("search_result",four_seat);
+
+
+//        modelAndView.addObject("search_result",search_result);
         return modelAndView;
     }
 
     @GetMapping("/reseration")
-    public ModelAndView reservationWithoutParams(HttpSession session) {
+    public ModelAndView reservationWithoutParams(HttpSession session,@RequestParam int page_number) {
         // 处理不带参数的逻辑
         // ...
         ModelAndView modelAndView = new ModelAndView("user/reseration");
-        List<Reservation> search_result;
-        try {
-            search_result = reservationService.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
+        Integer page_size= (Integer) session.getAttribute("page_size");
+        modelAndView.addObject("page_size",page_size);
+        List<Reservation> seatList= (List<Reservation>) session.getAttribute("seatList");
+        List<Reservation> four_seat=new ArrayList<>();
+        if(page_number!=page_size){
+            four_seat=seatList.subList(page_number*4-4,page_number*4);
+        }else{
+            four_seat=seatList.subList(page_number*4-4,seatList.size());
+
         }
-        modelAndView.addObject("search_result",search_result);
+
+        modelAndView.addObject("search_result",four_seat);
 
         return modelAndView;
     }
+
+
+
+
     @GetMapping("/forum")
     public ModelAndView fourm(){
         return new ModelAndView("user/forum");
@@ -115,10 +151,26 @@ public class UserController {
     public ModelAndView selffourm(){
         return new ModelAndView("user/selfforum");
     }
-    @GetMapping("/Contreteroom")
-    public ModelAndView showroom( ){
 
-        return new ModelAndView("user/Contrete_room");
+
+    @GetMapping("/Contreteroom")
+    public ModelAndView showroom(@RequestParam("room_id") int room_id,
+                                 @RequestParam("roomContent") String roomContent,
+                                 @RequestParam("roomPicture") String roomPicture,
+                                 @RequestParam("roomVolume") int roomVolume)
+    {
+        ModelAndView modelAndView = new ModelAndView("user/Contrete_room");
+        //希望有一个方法 根据room 查到seat 的状态
+        try {
+
+            List<Seat> findstautsbyid = studyRoomService.findstautsbyid(room_id);
+
+            modelAndView.addObject("findstautsbyid",findstautsbyid);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return modelAndView;
     }
 
 

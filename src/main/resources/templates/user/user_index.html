@@ -145,7 +145,7 @@
         </a>
         <div class="collapse" id="auth">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration"> 预约订单 </a></li>
+            <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration?page_number=1"> 预约订单 </a></li>
             <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/changepassword"> 修改密码</a></li>
             <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/favorite"> 收藏座位 </a></li>
             <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
@@ -155,23 +155,52 @@
     </ul>
   </nav>
 
-  <div class="main-panel">
-    <ul   th:each = "all : ${alls}" style="margin-top: 30px">
-      <div class="container">
-        <li>
-          <div class="times" style="font-size: 18px" th:text="${all.getNotice_time()}"></div>
-          <div class="title"  th:text="${all.getNotice_title()}" ></div>
-          <form id="deletenotice" action="/delete" style="display: inline-block;float: right" method="get">
-            <img  style="height: 15%;width: 15%;float: right;margin: 6px"   src=" http://localhost:8881/images/login/delete.jpg" onclick="submitForm()">
-            <input type="hidden" th:value="${all.getNotice_id}" name="id">
-          </form>
-        </li>
-        <li style="height: 100%">
-          <div class="Content" th:text="${all.getNotice_content()}">  </div>
-        </li>
-      </div>
-    </ul>
+<!--  <div class="main-panel">-->
+<!--    <ul   th:each = "all : ${alls}" style="margin-top: 30px">-->
+<!--      <div class="container">-->
+<!--        <li>-->
+<!--          <div class="times" style="font-size: 18px" th:text="${all.getNotice_time()}"></div>-->
+<!--          <div class="title"  th:text="${all.getNotice_title()}" ></div>-->
+<!--          <form id="deletenotice" action="/delete" style="display: inline-block;float: right" method="get">-->
+<!--            <img  style="height: 15%;width: 15%;float: right;margin: 6px"   src=" http://localhost:8881/images/login/delete.jpg" onclick="submitForm()">-->
+<!--            <input type="hidden" th:value="${all.getNotice_id}" name="id">-->
+<!--          </form>-->
+<!--        </li>-->
+<!--        <li style="height: 100%">-->
+<!--          <div class="Content" th:text="${all.getNotice_content()}">  </div>-->
+<!--        </li>-->
+<!--      </div>-->
+<!--    </ul>-->
 
+<!--  </div>-->
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <!-- 使用Thymeleaf的th:each指令来遍历通知数据 -->
+      <div class="row" th:each="notice, status : ${alls}">
+        <div class="col-md-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <!--通知信息 -->
+              <div class="template-demo">
+                <div>
+                  <h3 th:text="${notice.notice_title}"></h3>
+                  <h5>
+                    <small class="text-muted" th:text="${notice.notice_time}"></small>
+                  </h5>
+                </div>
+                <div class="template-demo">
+                  <h4>
+                    <small class="text-muted" th:text="${notice.notice_content}"></small>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </div>

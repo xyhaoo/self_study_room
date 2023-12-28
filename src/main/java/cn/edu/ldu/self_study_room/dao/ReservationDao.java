@@ -15,9 +15,10 @@ public interface ReservationDao {
     void insert(Reservation notice) throws Exception;
 
     //删除记录，供管理员删除通知
-    @Delete("delete from reservation where user_id=#{user_id}")
-    void delete(@Param("notice_id") String notice_id) throws Exception;
 
-
+    @Delete("delete from reservation where user_id=#{user_id} and room_id=#{room_id} and seat_number=#{seat_number}")
+    void delete(@Param("user_id") String user_id,
+                @Param("room_id") int room_id,
+                @Param("seat_number") int seat_number) throws Exception;
 
 }

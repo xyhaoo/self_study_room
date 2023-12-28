@@ -186,7 +186,7 @@
                 </a>
                 <div class="collapse" id="auth">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration"> 预约订单 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration?page_number=1"> 预约订单 </a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/changepassword"> 修改密码</a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/favorite"> 收藏座位 </a></li>
                         <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
@@ -240,9 +240,21 @@
 
                     <button type="submit" class="btn btn-success" style="float: right; margin: 5px;">确认预约</button>
                 </form>
-
         </div>
+
+
+
+
+
     </div>
+
+
+    <ul  hidden="hidden" id="seatList" th:each="seat, index: ${findstautsbyid}">
+        <p th:text="${index.count}"> </p>
+        <li th:text="${seat.getSeat_number() }"></li>
+        <li th:text="${seat.getRoom_id()}"></li>
+        <li th:text="${seat.getStatus()}"></li>
+    </ul>
 
 
 
@@ -282,13 +294,57 @@
         // document.getElementById("deletenotice").submit();
     }
 
+    var maxCount = 0;
+    var countElements = document.querySelectorAll('#seatList p');
+    countElements.forEach(function(element) {
+        var count = parseInt(element.textContent.trim());
+        if (count > maxCount) {
+            maxCount = count;
+        }
+    });
+    console.log("maxcount = "+maxCount);
+    // 获取包含座位信息的ul元素
+
+     // 获取ul下的所有li元素
+
+    // var occupiedSeats = [];
+    // 遍历li元素并获取数据
+    // for (var i = 0; i < seatItems.length; i+=3) {
+    //     var seatNumber = seatItems[i].textContent;
+    //     var roomId = seatItems[i+1].textContent;
+    //     var status = seatItems[i+2].textContent;
+    //
+    //     // 在控制台打印数据，你也可以根据需要进行后续处理
+    //     console.log("座位号：" + seatNumber + "，房间号：" + roomId + "，状态：" + status);
+    //     if (status === "occupied" || status === "maintenance") {
+    //         occupiedSeats.push(seatNumber); // 将满足条件的座位号添加到数组中
+    //     }
+    // }
+    var seatItems = document.querySelectorAll("#seatList li"); // 获取所有座位列表项
+    var occupiedSeats = []; // 创建一个空数组，用于存储满足条件的座位号
+
+    seatItems.forEach(function(item, index) {
+        if (index % 3 === 0) { // 座位号的索引是3的倍数
+            var seatNumber = item.textContent;
+            var roomId = seatItems[index + 1].textContent;
+            var status = seatItems[index + 2].textContent;
+
+            if (status === "occupied" || status === "maintenance") {
+                occupiedSeats.push(seatNumber); // 将满足条件的座位号添加到数组中
+            }
+        }
+    });
+
+    console.log(occupiedSeats); // 打印满足条件的座位号数组
+
+
         var urlParams = new URLSearchParams(window.location.search);
-        var roomId = urlParams.get("roomId");
+        var room_id = urlParams.get("room_id");
         var roomContent = urlParams.get("roomContent");
         var roomPicture = urlParams.get("roomPicture");
         var roomVolume = urlParams.get("roomVolume");
         // 根据需要使用选中的数据
-        console.log(roomId, roomContent, roomPicture,roomVolume);
+        console.log(room_id, roomContent, roomPicture,roomVolume);
         var picture = document.getElementById("picture")
         picture.src = roomPicture
 
@@ -298,11 +354,11 @@
     paragraph.textContent =    roomContent;
 
     var title = document.querySelector("h3");
-    title.textContent = "欢迎来到"+  roomId+"号自习室";
+    title.textContent = "欢迎来到"+  room_id+"号自习室";
 
     var datetimeInput = document.getElementById("datetime-input");
 
-
+    //var seatItems = seatList.getElementsByTagName('li');
     var selectedSeat = null;
     var selectnumber = 0;
     var seatsContainer = document.getElementById('seats');
@@ -316,7 +372,25 @@
         seatImage.alt = i; // 将 alt 属性设置为座位号码
         seatImage.setAttribute('data-seat-number', i); // 添加 data-seat-number 属性
 
-        seatImage.addEventListener('click', function() {
+        if(occupiedSeats.includes(String(i)))
+            seatImage.src = "/images/faces/site.png";
+
+        // for (var j = 0; j < seatItems.length  ; j += 3) {
+        //
+        //     var seatNumber = seatItems[j].textContent;
+        //     var roomId = seatItems[j + 1].textContent;
+        //     var status = seatItems[j + 2].textContent;
+        //
+        //     // 在控制台打印数据，你也可以根据需要进行后续处理
+        //     console.log("座位号：" + seatNumber + "，房间号：" + roomId + "，状态：" + status);
+        //
+        //     if (seatNumber === String(i) && (status === "occupied" || status === "maintenance")) {
+        //         seatImage.src = "/images/faces/site.png";
+        //     }
+        //
+        // }
+
+            seatImage.addEventListener('click', function() {
             if (selectedSeat) {
                 // 如果已经有选中的座位，取消其选中状态
                 selectedSeat.src = "/images/faces/unseat.png";
@@ -341,46 +415,14 @@
         seatsContainer.appendChild(seatContainer);
 
         var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
-        document.getElementById('roomid').value = roomId;
+        document.getElementById('roomid').value = room_id;
     }
 
-    // var selectedSeat = null;
-    // var selectnumber = 0;
-    // var seatsContainer = document.getElementById('seats');
-    // for (var i = 1; i <= roomVolume; i++) {
-    //     var seatContainer = document.createElement('div');
-    //     seatContainer.className = 'seat-container';
-    //
-    //     var seat = document.createElement('div');
-    //     seat.className = 'seat';
-    //     seat.textContent = i;
-    //
-    //     var seatImage = document.createElement('img');
-    //     seatImage.className = 'seat-image';
-    //     seatImage.src = "/images/faces/unseat.png"; // 替换为你的图片路径
-    //
-    //     seat.addEventListener('click', function() {
-    //         if (selectedSeat) {
-    //             // 如果已经有选中的座位，取消其选中状态
-    //             selectedSeat.classList.remove('selected');
-    //         }
-    //
-    //         // 更新已选座位，并添加选中状态
-    //         selectedSeat = this;
-    //         selectnumber = parseInt(selectedSeat.textContent);
-    //         console.log(selectnumber + "   ")
-    //         selectedSeat.classList.add('selected');
-    //         document.getElementById('seat-number').value = selectnumber;
-    //     });
-    //
-    //     seatContainer.appendChild(seat);
-    //     seatContainer.appendChild(seatImage); // 将图片添加到座位容器中
-    //     seatsContainer.appendChild(seatContainer); // 将座位容器添加到座位容器中
-    //
-    //     var selectedDateTime = datetimeInput.value; // 获取用户选择的时间值
-    //     document.getElementById('roomid').value = roomId;
-    //
-    // }
+
+
+
+
 
 </script>
+
 </html>

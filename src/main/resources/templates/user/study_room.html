@@ -150,7 +150,7 @@
                 </a>
                 <div class="collapse" id="auth">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration"> 预约订单 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration?page_number=1"> 预约订单 </a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/changepassword"> 修改密码</a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/favorite"> 收藏座位 </a></li>
                         <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
@@ -272,17 +272,21 @@
         room.addEventListener("click", function(event) {
             var clickedRoom = event.target.closest(".card");
 
-            var roomId = clickedRoom.querySelector(".card-title").textContent;
+            var room_id = clickedRoom.querySelector(".card-title").textContent;
+            console.log(room_id)
             var roomContent = clickedRoom.querySelector(".card-text").textContent;
             var roomPicture = clickedRoom.querySelector(".card-img-top").getAttribute("src");
-            var roomVolume = clickedRoom.querySelector("#room_volume_input_" + roomId).value;
+            var roomVolume = clickedRoom.querySelector("#room_volume_input_" + room_id).value;
 
-            var url = "http://localhost:8881/self_study_room/user/Contreteroom?roomId=" + encodeURIComponent(roomId) +
+            var url = "http://localhost:8881/self_study_room/user/Contreteroom?" +
+                "&room_id=" + encodeURIComponent(room_id) +
                 "&roomContent=" + encodeURIComponent(roomContent) +
                 "&roomPicture=" + encodeURIComponent(roomPicture) +
                 "&roomVolume=" + encodeURIComponent(roomVolume);
-
             window.location.href = url;
+
+
+
         });
     });
 

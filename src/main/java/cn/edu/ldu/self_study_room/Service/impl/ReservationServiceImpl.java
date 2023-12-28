@@ -26,8 +26,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-    @Override
-    public void delete(String user_id) {
 
+
+    @Override
+    public void delete(String user_id,int room_id,int seat_number) {
+        try {
+            reservationDao.delete(user_id,room_id,seat_number);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

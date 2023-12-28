@@ -13,7 +13,7 @@
     function addActiveClass(element) {
       if (current === "") {
         //for root url
-        console.log("root 目录")
+        // console.log("root 目录")
         if (element.attr('href').indexOf("admin_index.html") !== -1) {
           element.parents('.nav-item').last().addClass('active');
           if (element.parents('.sub-menu').length) {
@@ -24,8 +24,8 @@
 
       } else {
         //for other url
-        console.log(element.attr('href'))
-        console.log(element.attr('href').indexOf(current))
+        // console.log(element.attr('href'))
+        // console.log(element.attr('href').indexOf(current))
         if (element.attr('href').indexOf(current) !== -1) {
 
           element.parents('.nav-item').last().addClass('active');
@@ -51,7 +51,7 @@
 
     $('.nav li a', sidebar).each(function() {
       var $this = $(this);
-      console.log(current+" wwwwwwwwwwwwwwwwwwwwwwwww")
+      // console.log(current+" wwwwwwwwwwwwwwwwwwwwwwwww")
       addActiveClass($this);
     })
 

@@ -11,4 +11,6 @@ public interface favoritesService {
     void insert(Favorites favorites);
 
     String findStatus(int room_id,int seat_number) throws Exception;
+
+    void delete(String user_id,int room_id,int seat_number) ;
 }

@@ -8,11 +8,11 @@ import java.util.List;
 public interface ReservationService {
     List<Reservation> findAll() throws Exception;
 
-    //增加记录，供管理员发布新通知
+
     void insert(Reservation Reservation);
 
-    //删除记录，供管理员删除通知
-    void delete(String user_id);
+
+    void delete(String user_id,int room_id,int seat_number);
 
 
 }

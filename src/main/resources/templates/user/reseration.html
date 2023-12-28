@@ -49,7 +49,24 @@
             list-style-type: none;
 
         }
+        #main_body{
+            height: 700px;
+            /*background-color: #5E50F9;*/
+        }
 
+        .round-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px; /* 设置圆角矩形的圆角半径 */
+            background-color: #ffffff; /* 设置白色背景 */
+            border: 1px solid #ccc6c6; /* 设置浅黑色边框 */
+            color: #000000; /* 设置文字颜色 */
+            transition: background-color 0.1s; /* 设置鼠标悬停时的过渡效果 */
+            margin-left: 2px;
+        }
+        .round-button:hover {
+            background-color: #e0dbdb; /* 鼠标悬停时背景颜色变为灰色 */
+        }
 
     </style>
 
@@ -145,7 +162,7 @@
                 </a>
                 <div class="collapse" id="auth">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration"> 预约订单 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration?page_number=1"> 预约订单 </a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/changepassword"> 修改密码</a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/favorite"> 收藏座位 </a></li>
                         <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
@@ -165,11 +182,16 @@
             <input type="hidden" name="reserve_time" value="" />
         </form>
 
-        <div class="content-wrapper">
+        <form id="dataformdelete" action="/self_study_room/user/deletes"  >
+
+            <input type="hidden" id="room_idDe" name="room_idDe" value="" />
+            <input type="hidden" id="seat_numberDe" name="seat_numberDe" value="" />
+        </form>
+        <div class="content-wrapper" id="main_content">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body"  style="height: 80%">
                     <h1 class="card-title">预约列表</h1>
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="main_body">
                         <table id="recent-purchases-listing" class="table">
                             <thead>
                             <tr class="table-success">
@@ -181,7 +203,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="reservation, status : ${search_result}">
+                            <tr th:each="reservation, status : ${search_result}" >
                                 <td th:text="${reservation.getRoom_id()}"></td>
                                 <td th:text="${reservation.getSeat_number()}"></td>
                                 <td th:text="${#dates.format(reservation.getReserve_time(), 'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -193,12 +215,8 @@
                                             收藏
                                         </button>
 
-                                        <button type="button" class="btn btn-outline-secondary btn-icon-text" style="height: 50px">
-                                            <i class="mdi mdi-file-check btn-icon-append"></i>
-                                            编辑
-                                        </button>
 
-                                        <button type="button" class="btn btn-danger btn-icon-text" style="height: 50px">
+                                        <button type="button" class="btn btn-danger btn-icon-text" style="height: 50px" onclick="deleteReservation(this)">
                                             <i class="mdi mdi-delete"></i>
                                             删除
                                         </button>
@@ -210,6 +228,18 @@
                         </table>
                     </div>
                 </div>
+
+                <form id="turn_page" action="http://localhost:8881/self_study_room/user/reseration" method="get">
+                    <input type="hidden" id="page_number" name="page_number"/>
+                    <div id="pageBtn" style="text-align: center;">
+                        <button th:each="i : ${#numbers.sequence(1, page_size)}"
+                                th:value="${i}"
+                                th:class="'round-button'"
+                                th:text="${i}"
+                                onclick="paging_turn(this)"
+                                type="button"></button>
+                    </div>
+                </form>
             </div>
 
 
@@ -223,6 +253,13 @@
 
 </div>
 <script>
+    // 换页
+    function paging_turn(input){
+        document.getElementById("page_number").value=input.value;
+        document.getElementById("turn_page").submit();
+    }
+
+
 
     function collectData(button) {
         // 获取所在行的数据
@@ -240,9 +277,27 @@
         form.querySelector('input[name="room_id"]').value = room_id;
         form.querySelector('input[name="seat_number"]').value = seat_number;
         form.querySelector('input[name="reserve_time"]').value = reserve_time;
-
+        console.log("删除")
         // 提交表单
         form.submit();
+    }
+
+    function deleteReservation(button) {
+        var row = button.closest('tr'); // 获取当前行
+        var room_idDe = row.querySelector('td:nth-child(1)').textContent.trim(); // 获取预约教室
+        var seat_numberDe = row.querySelector('td:nth-child(2)').textContent.trim(); // 获取预约座位
+
+        // 将数据存储在隐藏的 input 元素中
+
+
+
+        var form = document.getElementById('dataformdelete');
+
+        document.getElementById('room_idDe').value = room_idDe;
+
+        document.getElementById('seat_numberDe').value = seat_numberDe;
+
+        document.getElementById('dataformdelete').submit();
     }
 </script>
 

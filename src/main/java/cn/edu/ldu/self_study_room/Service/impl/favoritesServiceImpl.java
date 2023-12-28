@@ -30,5 +30,14 @@ public class FavoritesServiceImpl implements favoritesService {
         return favoriteDao.findStatus(room_id,seat_number);
     }
 
+    @Override
+    public void delete(String user_id, int room_id, int seat_number) {
+        try {
+            favoriteDao.delete(user_id,room_id,seat_number);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

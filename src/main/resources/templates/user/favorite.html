@@ -145,7 +145,7 @@
                 </a>
                 <div class="collapse" id="auth">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration"> 预约订单 </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/reseration?page_number=1"> 预约订单 </a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/changepassword"> 修改密码</a></li>
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/favorite"> 收藏座位 </a></li>
                         <!--                        <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>-->
@@ -155,13 +155,12 @@
         </ul>
     </nav>
 
-
-
-
-
-
-
         <div class="col-lg-6 grid-margin stretch-card" style="margin: 0 auto">
+            <form id="dataformdelete" action="/self_study_room/user/deletefavorite"  >
+
+                <input type="hidden" id="room_id" name="room_id" value="" />
+                <input type="hidden" id="seat_number" name="seat_number" value="" />
+            </form>
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">收藏的座位</h4>
@@ -173,6 +172,7 @@
                                 <th>座位号</th>
                                 <th>状态</th>
                                 <th>预定</th>
+                                <th>删除</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -186,6 +186,7 @@
 <!--                                <td>      <button type="button" class="btn btn-success btn-rounded btn-icon">-->
 <!--                                    <i class="mdi mdi-map-marker"></i>-->
 <!--                                </button></td>-->
+                                <td> <img src="/images/login/delete.jpg" onclick="deletefavorite(this)"> </td>
 
                             </tr>
 
@@ -202,7 +203,24 @@
 
 
 </div>
+<script>
+    function deletefavorite(element) {
+        var row = element.parentNode.parentNode;
+        var tds = row.querySelectorAll("td");
 
+        var room_id = tds[0].textContent;
+        var seat_number = tds[1].textContent;
+        var status = tds[2].textContent;
+
+        document.getElementById("room_id").value = room_id;
+        document.getElementById("seat_number").value = seat_number;
+
+        document.getElementById("dataformdelete").submit();
+    }
+
+
+
+</script>
 
 <!-- plugins:js -->
 <script src="/vendors/base/vendor.bundle.base.js"></script>
