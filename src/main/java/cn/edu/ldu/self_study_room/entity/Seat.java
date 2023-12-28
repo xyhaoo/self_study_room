@@ -11,5 +11,4 @@ public class Seat {
     int room_id;
     int seat_number;
     String status;
-
 }
