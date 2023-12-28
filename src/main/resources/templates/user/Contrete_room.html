@@ -229,7 +229,7 @@
 
             </div>
 
-                <form action="/self_study_room/user/reseration" style="text-align: right;">
+                <form id="show_reseration_success" action="/self_study_room/user/reseration" style="text-align: right;">
                     <div class="form-group" style="display: inline-block;">
                         <label style="font-size: 28px" for="datetime-input">请选择日期和时间：</label>
                         <input type="datetime-local" name="datetime" id="datetime-input" class="form-control" style="display: inline-block; width: auto;">
@@ -238,7 +238,7 @@
                     <input type="hidden" name="roomId" id="roomid">
                     <input type="hidden" name="seatNumber" id="seat-number">
 
-                    <button type="submit" class="btn btn-success" style="float: right; margin: 5px;">确认预约</button>
+                    <button type="button" onclick="show_reseration_succuss()" class="btn btn-success" style="float: right; margin: 5px;">确认预约</button>
                 </form>
         </div>
 
@@ -404,11 +404,25 @@
         document.getElementById('roomid').value = room_id;
     }
 
+    function show_reseration_succuss(){
+        Swal.fire({
+            title: '提示',
+            text: '预约成功'    ,
+            icon: 'success',
+            showConfirmButton: false
+        });
+
+        setTimeout(function() {
+            document.getElementById("show_reseration_success").submit();
+        }, 2000);
+
+    }
+
 
 
 
 
 
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

@@ -16,6 +16,7 @@ public interface SeatService {
     public List<Seat> findAll();
     public List<Seat> findAllByRoomId(int room_id);
     public String update(int seat_number, String status);
+    List<Seat> findAllbyid(int room_id,int maxseat_number,int minseat_number);
 
 
 }

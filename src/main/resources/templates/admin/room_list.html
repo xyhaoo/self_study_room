@@ -137,6 +137,14 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title">座位列表</h1>
+                    <form action="http://localhost:8881/self_study_room/admin/searchseat" method="post">
+                        <input type="text" placeholder="房间号" name="room_id">
+                        <input type="text" placeholder="最小的座位号" name="minseat_number">
+                        <input type="text" placeholder="最大的座位号" name="maxseat_number">
+
+                        <input type="submit" value="查询">
+                    </form>
+
                     <div class="table-responsive">
                         <table id="recent-purchases-listing" class="table">
                             <thead>
@@ -182,6 +190,8 @@
                                             <button th:if="${seat.status == 'occupied'}" class="btn btn-warning btn-rounded btn-fw "
                                                     disabled>修改状态</button>
                                         </div>
+                                        <input hidden="hidden" name="seat_number" th:value="${seat.getSeat_number()}">
+
                                     </form>
 
                                 </td>

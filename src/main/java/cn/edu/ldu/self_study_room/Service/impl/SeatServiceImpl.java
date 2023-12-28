@@ -15,13 +15,17 @@ public class SeatServiceImpl implements SeatService {
     private SeatDao seatDao;
 
     @Override
-    public List<Seat> findAll() throws Exception {
-        return seatDao.findAll();
+    public List<Seat> findAll()   {
+        try {
+            return seatDao.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Override
-    public List<Seat> findAllByRoomId(int room_id) throws Exception {
+    public List<Seat> findAllByRoomId(int room_id)   {
         return seatDao.findAllByRoomId(room_id);
     }
 
@@ -35,4 +39,11 @@ public class SeatServiceImpl implements SeatService {
         }
 
     }
+
+    @Override
+    public List<Seat> findAllbyid(int room_id,int maxseat_number,int minseat_number) {
+        return seatDao.findAllbyid(room_id,maxseat_number,minseat_number);
+    }
+
+
 }

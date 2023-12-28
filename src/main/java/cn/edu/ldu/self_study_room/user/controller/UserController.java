@@ -57,9 +57,11 @@ public class UserController {
                                      @RequestParam("phoneNumber") String phoneNumber,
                                      @RequestParam("password") String password,
                                      @RequestParam("confirmPassword") String confirmPassword,
-                                     @RequestParam("gender") String gender, HttpSession session){
+                                         @RequestParam("gender") String gender, HttpSession session){
         System.out.println(session.getAttribute("user_id"));
         String user_id= (String) session.getAttribute("user_id");
+
+
         System.out.println("用户名：" + username);
         System.out.println("手机号：" + phoneNumber);
         System.out.println("密码：" + password);
@@ -69,6 +71,7 @@ public class UserController {
         userService.update(user_id,username,password,phoneNumber,gender);
         return new ModelAndView("user/changepassword");
     }
+
     @GetMapping(value = "/reseration", params = {"datetime", "roomId", "seatNumber"})
     public ModelAndView reseration(@RequestParam("datetime")   String datetime,
                                    @RequestParam("roomId") int roomId,
@@ -93,17 +96,12 @@ public class UserController {
       //  seatService.insert(roomId,seatNumber,"2");
         seatService.update(seatNumber,"2");
        reservationService.insert(new Reservation(user_id,roomId,seatNumber,datetimes));
-
-
         List<Reservation> search_result;
         try {
             search_result = reservationService.findAll(user_id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
-
         session.setAttribute("seatList",search_result);
         Integer page_size = (search_result.size() % 4 == 0) ? search_result.size() / 4 : (search_result.size() / 4) + 1;
         session.setAttribute("page_size",page_size);

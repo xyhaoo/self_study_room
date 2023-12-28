@@ -53,8 +53,15 @@ public class loginpage {
         System.out.println("Password: " + password);
 
         if(user_id.equals("admin") && password.equals("123456")){
-
+            session.setAttribute("admin_id",user_id);
             ModelAndView modelAndView = new ModelAndView("admin/admin_index");
+            try {
+                List<Notice> all = noticeService.findAll();
+                modelAndView.addObject("search_result",all);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
             modelAndView.addObject("cur_user", userService.findNameById(user_id));
             return modelAndView;
         }

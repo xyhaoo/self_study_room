@@ -31,5 +31,8 @@ public interface SeatDao {
     @Select("select * from seat where room_id = #{roomId}")
     List<Seat> findAllByRoomId(int roomId);
 
+    @Select("select * from seat where room_id like #{roomId} and seat_number <= #{maxseat_number} and seat_number >= #{minseat_number}")
+    List<Seat> findAllbyid(int roomId,int maxseat_number,int minseat_number);
+
 
 }

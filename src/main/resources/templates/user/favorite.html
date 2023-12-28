@@ -204,19 +204,6 @@
 
 </div>
 <script>
-    function deletefavorite(element) {
-        var row = element.parentNode.parentNode;
-        var tds = row.querySelectorAll("td");
-
-        var room_id = tds[0].textContent;
-        var seat_number = tds[1].textContent;
-        var status = tds[2].textContent;
-
-        document.getElementById("room_id").value = room_id;
-        document.getElementById("seat_number").value = seat_number;
-
-        document.getElementById("dataformdelete").submit();
-    }
 
 
 
@@ -246,9 +233,43 @@
 </body>
 <script>
     function submitForm(){
+        Swal.fire({
+            title: '提示',
+            text: '预约成功'    ,
+            icon: 'success',
+            showConfirmButton: false
+        });
+        setTimeout(function() {
+            document.getElementById("deletenotice").submit();
+        }, 2000);
 
-        document.getElementById("deletenotice").submit();
+
+    }
+    function deletefavorite(element) {
+        var row = element.parentNode.parentNode;
+        var tds = row.querySelectorAll("td");
+
+        var room_id = tds[0].textContent;
+        var seat_number = tds[1].textContent;
+        var status = tds[2].textContent;
+
+        document.getElementById("room_id").value = room_id;
+        document.getElementById("seat_number").value = seat_number;
+
+
+
+        Swal.fire({
+            title: '提示',
+            text: '删除成功'    ,
+            icon: 'success',
+            showConfirmButton: false
+        });
+        setTimeout(function() {
+            document.getElementById("dataformdelete").submit();
+        }, 2000);
     }
 
+
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

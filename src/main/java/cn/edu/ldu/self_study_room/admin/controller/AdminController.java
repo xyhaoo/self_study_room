@@ -91,15 +91,15 @@ public class AdminController {
 
     //修改自习室位置状态
     @PostMapping("/room_list")
-    public ModelAndView seatManage(@RequestParam("room_id")int room_id,
+    public ModelAndView seatManage(@RequestParam("seat_number")int seat_number,
                                    @RequestParam(required = false)String status){
         ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/room_list");
 
-        System.out.println(room_id);
+        System.out.println(seat_number);
         System.out.println(status);
 
-//        String result = seatService.update(seat_number, status);
-//        modelAndView.addObject("result", result);
+        String result = seatService.update(seat_number, status);
+        modelAndView.addObject("result", result);
         return modelAndView;
     }
 
@@ -216,7 +216,21 @@ public class AdminController {
     }
 
 
+    @RequestMapping("/searchseat")
+    public ModelAndView searchseat(@RequestParam("room_id") int room_id,
+                                   @RequestParam("maxseat_number") int maxseat_number,
+                                   @RequestParam("minseat_number") int minseat_number){
+        ModelAndView modelAndView = new ModelAndView("admin/room_list");
+        List<Seat> alls = seatService.findAllbyid(room_id,maxseat_number,minseat_number);
+        System.out.println(alls.size());
+        if (alls.isEmpty()){
+            modelAndView.addObject("search_failed", "暂时没有通知～");
+        }else {
+            modelAndView.addObject("seats", alls);
+        }
 
+        return modelAndView;
+    }
 
 
 }

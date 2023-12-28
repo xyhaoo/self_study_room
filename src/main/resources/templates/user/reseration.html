@@ -302,9 +302,19 @@
         form.querySelector('input[name="room_id"]').value = room_id;
         form.querySelector('input[name="seat_number"]').value = seat_number;
         form.querySelector('input[name="reserve_time"]').value = reserve_time;
-        console.log("删除")
+        Swal.fire({
+            title: '提示',
+            text: '收藏成功'    ,
+            icon: 'success',
+            showConfirmButton: false
+        });
+
+
         // 提交表单
-        form.submit();
+        // form.submit();
+        setTimeout(function() {
+            form.submit();
+        }, 2000);
     }
 
     function deleteReservation(button) {
@@ -319,8 +329,16 @@
         document.getElementById('room_idDe').value = room_idDe;
 
         document.getElementById('seat_numberDe').value = seat_numberDe;
+        Swal.fire({
+            title: '提示',
+            text: '删除成功'    ,
+            icon: 'success',
+            showConfirmButton: false
+        });
+        setTimeout(function() {
+            document.getElementById('dataformdelete').submit();
+        }, 2000);
 
-        document.getElementById('dataformdelete').submit();
     }
 
 
@@ -374,6 +392,7 @@
 <!-- End custom js for this page-->
 
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

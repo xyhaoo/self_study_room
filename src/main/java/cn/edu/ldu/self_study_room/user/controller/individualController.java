@@ -61,7 +61,6 @@ public class individualController {
                              @RequestParam("reserve_time") String reserveTime,HttpSession session) {
         ModelAndView m = new ModelAndView("user/favorite");
         try {
-
             System.out.println(session.getAttribute("user_id"));
             String userId = (String) session.getAttribute("user_id");
             System.out.println(userId+" "+roomId);
@@ -88,7 +87,6 @@ public class individualController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         return m;
     }
 
@@ -117,7 +115,6 @@ public class individualController {
                 four_seat=search_result.subList(1*4-4,1*4);
             }else{
                 four_seat=search_result.subList(1*4-4,search_result.size());
-
             }
             Date currentDate = new Date();
             long oneDayInMillis = 24 * 60 * 60 * 1000; // 一天的毫秒数
