@@ -5,7 +5,6 @@ import cn.edu.ldu.self_study_room.entity.Reservation;
 import cn.edu.ldu.self_study_room.entity.Seat;
 import cn.edu.ldu.self_study_room.service.NoticeService;
 import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.SeatServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.StudyRoomServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -34,9 +33,6 @@ public class UserController {
     ReservationServiceImpl reservationService;
     @Autowired
     StudyRoomServiceImpl studyRoomService;
-    @Autowired
-    SeatServiceImpl seatService;
-
 
     @GetMapping("/notice")
     public ModelAndView shownotice(){
@@ -81,6 +77,7 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView("user/reseration");
 
+
         // 进行其他操作
         String user_id = (String) session.getAttribute("user_id");
         System.out.println(user_id);
@@ -91,15 +88,10 @@ public class UserController {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-//        //修改状态
-      //  seatService.insert(roomId,seatNumber,"2");
-        seatService.update(roomId,seatNumber,"2");
        reservationService.insert(new Reservation(user_id,roomId,seatNumber,datetimes));
-
-
         List<Reservation> search_result;
         try {
-            search_result = reservationService.findAll(user_id);
+            search_result = reservationService.findAll();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -117,22 +109,10 @@ public class UserController {
         }else{
             four_seat=search_result.subList(1*4-4,search_result.size());
         }
-        Date currentDate = new Date();
-        long oneDayInMillis = 24 * 60 * 60 * 1000; // 一天的毫秒数
-        List<Integer> overtime = new ArrayList<Integer>();
-        for (Reservation reservation : four_seat) {
-            System.out.println("---------");
-            System.out.println(reservation.getReserve_time());
-            if (currentDate.getTime() - reservation.getReserve_time().getTime() > oneDayInMillis) {
-                System.out.println("超过一天");
-                System.out.println(reservation.getSeat_number());
-                System.out.println(reservation.getReserve_time());
-                overtime.add(reservation.getSeat_number());
-            }
-        }
 
-        modelAndView.addObject("overtime",overtime);
+
         modelAndView.addObject("search_result",four_seat);
+
 
 //        modelAndView.addObject("search_result",search_result);
         return modelAndView;
@@ -151,23 +131,10 @@ public class UserController {
         if(page_number!=page_size){
             four_seat=seatList.subList(page_number*4-4,page_number*4);
         }else{
-                four_seat=seatList.subList(page_number*4-4,seatList.size());
-        }
-        Date currentDate = new Date();
-        long oneDayInMillis = 24 * 60 * 60 * 1000; // 一天的毫秒数
-        List<Integer> overtime = new ArrayList<Integer>();
-        for (Reservation reservation : four_seat) {
-            System.out.println("---------");
-            System.out.println(reservation.getReserve_time());
-            if (currentDate.getTime() - reservation.getReserve_time().getTime() > oneDayInMillis) {
-                System.out.println("超过一天");
-                System.out.println(reservation.getSeat_number());
-                System.out.println(reservation.getReserve_time());
-                overtime.add(reservation.getSeat_number());
-            }
+            four_seat=seatList.subList(page_number*4-4,seatList.size());
+
         }
 
-        modelAndView.addObject("overtime",overtime);
         modelAndView.addObject("search_result",four_seat);
 
         return modelAndView;
@@ -199,22 +166,6 @@ public class UserController {
             List<Seat> findstautsbyid = studyRoomService.findstautsbyid(room_id);
 
             modelAndView.addObject("findstautsbyid",findstautsbyid);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return modelAndView;
-    }
-
-
-    @GetMapping("/seachNotice")
-    public ModelAndView seachNotice(HttpSession session,@RequestParam String notice_titile) {
-        // 处理不带参数的逻辑
-        // ...
-        ModelAndView modelAndView = new ModelAndView("user/user_index");
-        try {
-            List<Notice> findbutitile = NoticeService.findbutitile(notice_titile);
-            modelAndView.addObject("alls",findbutitile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -90,6 +90,7 @@ public class PostController {
                     comment_id = cur_id;
                 }
             }
+            comment_id+=1;
         }catch (Exception e){
             //findAll方法异常，出现此类型的通知id时，应该修正findAll
             Random random = new Random();
@@ -104,8 +105,12 @@ public class PostController {
         LocalDateTime currentDateTime = LocalDateTime.now();
         Timestamp now = Timestamp.valueOf(currentDateTime);
 
+        System.out.println(post_id);
+        System.out.println(comment_content);
+
+
         String status = commentService.insert(comment_id, post_id, user_id, now, comment_content, false);
-        ModelAndView modelAndView = new ModelAndView("admin/post_detail");
+        ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/"+post_id);
         modelAndView.addObject("status", status);
         return modelAndView;
 

@@ -12,8 +12,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     ReservationDao reservationDao;
     @Override
-    public List<Reservation> findAll(String user_id) throws Exception {
-        return reservationDao.findAll(user_id);
+    public List<Reservation> findAll() throws Exception {
+        return reservationDao.findAll();
     }
 
     @Override

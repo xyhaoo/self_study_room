@@ -138,24 +138,25 @@
                 <div class="card-body">
                     <h1 class="card-title">座位列表</h1>
                     <div class="table-responsive">
-                        <form method="post" action="http://localhost:8881/self_study_room/admin/room_list">
-                            <table id="recent-purchases-listing" class="table">
-                                <thead>
-                                <tr class="table-success">
-                                    <th>自习室房间号</th>
-                                    <th>座位号</th>
-                                    <th>座位状态</th>
-                                    <th data-sortable="false">管理</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="seat, status : ${seats}">
-                                    <td  th:text="${seat.room_id}"></td>
-                                    <td  th:text="${seat.seat_number}"></td>
-                                    <td  th:text="${seat.status == 'maintenance' ? '维修中' : (seat.status == 'available' ? '可用' : '被占用')}"></td>
-                                    <td>
+                        <table id="recent-purchases-listing" class="table">
+                            <thead>
+                            <tr class="table-success">
+                                <th>自习室房间号</th>
+                                <th>座位号</th>
+                                <th>座位状态</th>
+                                <th data-sortable="false">管理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="seat : ${seats}">
+                                <td  th:text="${seat.room_id}"></td>
+                                <td  th:text="${seat.seat_number}"></td>
+                                <td  th:text="${seat.status == 'maintenance' ? '维修中' : (seat.status == 'available' ? '可用' : '被占用')}"></td>
+                                <td>
+                                    <form method="post" action="http://localhost:8881/self_study_room/admin/room_list">
                                         <div class="form-check form-check-success">
                                             <label class="form-check-label">
+                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'available' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'available'}" th:value="${'available'}" name="status">
@@ -164,6 +165,7 @@
                                         </div>
                                         <div class="form-check form-check-warning">
                                             <label class="form-check-label">
+                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'maintenance' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'maintenance'}" th:value="${'maintenance'}" name="status">
@@ -180,14 +182,13 @@
                                             <button th:if="${seat.status == 'occupied'}" class="btn btn-warning btn-rounded btn-fw "
                                                     disabled>修改状态</button>
                                         </div>
-                                        <input type="hidden" name="seat_number" th:value="${seat.seat_number}">
+                                    </form>
 
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                        </form>
                     </div>
                 </div>
             </div>
