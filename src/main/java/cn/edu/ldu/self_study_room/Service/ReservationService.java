@@ -6,7 +6,7 @@ import cn.edu.ldu.self_study_room.entity.Reservation;
 import java.util.List;
 
 public interface ReservationService {
-    List<Reservation> findAll(String user_id) throws Exception;
+    List<Reservation> findAll() throws Exception;
 
 
     void insert(Reservation Reservation);

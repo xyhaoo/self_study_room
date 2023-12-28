@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 @Mapper
-public interface study_roomDao {
+public interface StudyRoomDao {
     //查询所有记录，供用户点击通知页面时全部展示
     @Select("select * from room")
     List<StudyRoom> findAll() throws Exception;
@@ -15,8 +15,8 @@ public interface study_roomDao {
     List<Seat> findstautsbyid(@Param("room_id") int room_id) throws Exception;
 
     //增加记录，供管理员发布新通知
-    @Insert("insert into room(room_id, room_content, room_picture,room_volume" +
-            "values (#{room_id}, #{room_content}, #{room_picture},#{room_volume})")
+    @Insert("insert into room(room_id, room_content, room_picture,room_volume) " +
+            "values(#{room_id}, #{room_content}, #{room_picture},#{room_volume})")
     void insert(StudyRoom self_study_room) throws Exception;
 
     //删除记录，供管理员删除通知

@@ -21,7 +21,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public List<Notice> findbutitile(String notice_titile) throws Exception {
-        return noticeDao.findbytitile('%'+notice_titile+"%");
+        return null;
     }
 
     //增加记录，供管理员发布新通知

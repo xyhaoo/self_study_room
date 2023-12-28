@@ -1,13 +1,10 @@
 package cn.edu.ldu.self_study_room.user.controller;
 
 import cn.edu.ldu.self_study_room.entity.Favorites;
-import cn.edu.ldu.self_study_room.entity.Notice;
 import cn.edu.ldu.self_study_room.entity.Reservation;
 import cn.edu.ldu.self_study_room.entity.User;
-import cn.edu.ldu.self_study_room.service.NoticeService;
 import cn.edu.ldu.self_study_room.service.UserService;
 import cn.edu.ldu.self_study_room.service.impl.FavoritesServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.NoticeServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -29,8 +26,6 @@ public class loginpage {
     @Autowired
     ReservationServiceImpl reservationService;
 
-    @Autowired
-    NoticeServiceImpl noticeService;
     @GetMapping("login")
     public ModelAndView showdata(){
         return new ModelAndView("login");
@@ -40,7 +35,7 @@ public class loginpage {
     public ModelAndView loading(@RequestParam("user_id") String user_id, @RequestParam("password") String password, HttpSession session) {
         List<Reservation> search_result;
         try {
-            search_result = reservationService.findAll(user_id);
+            search_result = reservationService.findAll();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -53,26 +48,20 @@ public class loginpage {
         System.out.println("Password: " + password);
 
         if(user_id.equals("admin") && password.equals("123456")){
-
             ModelAndView modelAndView = new ModelAndView("admin/admin_index");
             modelAndView.addObject("cur_user", userService.findNameById(user_id));
             return modelAndView;
         }
 
-
         try {
-
             for(User i : userService.findAll()){
                 if(user_id.equals(i.getUser_id()) && password.equals(i.getPassword())){
+
+
                     session.setAttribute("user_id", user_id);
-                   ModelAndView modelAndView = new  ModelAndView("user/user_index");
-                    List<Notice> all = noticeService.findAll();
-                    modelAndView.addObject("alls",all);
-                    return modelAndView;
+                    return new ModelAndView("user/user_index");
                 }
             }
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

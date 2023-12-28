@@ -375,6 +375,20 @@
         if(occupiedSeats.includes(String(i)))
             seatImage.src = "/images/faces/site.png";
 
+        // for (var j = 0; j < seatItems.length  ; j += 3) {
+        //
+        //     var seatNumber = seatItems[j].textContent;
+        //     var roomId = seatItems[j + 1].textContent;
+        //     var status = seatItems[j + 2].textContent;
+        //
+        //     // 在控制台打印数据，你也可以根据需要进行后续处理
+        //     console.log("座位号：" + seatNumber + "，房间号：" + roomId + "，状态：" + status);
+        //
+        //     if (seatNumber === String(i) && (status === "occupied" || status === "maintenance")) {
+        //         seatImage.src = "/images/faces/site.png";
+        //     }
+        //
+        // }
 
             seatImage.addEventListener('click', function() {
             if (selectedSeat) {
