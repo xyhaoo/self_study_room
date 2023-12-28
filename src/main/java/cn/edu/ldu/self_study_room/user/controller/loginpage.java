@@ -35,7 +35,7 @@ public class loginpage {
     public ModelAndView loading(@RequestParam("user_id") String user_id, @RequestParam("password") String password, HttpSession session) {
         List<Reservation> search_result;
         try {
-            search_result = reservationService.findAll();
+            search_result = reservationService.findAll(user_id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -48,16 +48,12 @@ public class loginpage {
         System.out.println("Password: " + password);
 
         if(user_id.equals("admin") && password.equals("123456")){
-<<<<<<< Updated upstream
-            return new ModelAndView("admin/admin_index");
-        }
 
-=======
             ModelAndView modelAndView = new ModelAndView("admin/admin_index");
             modelAndView.addObject("cur_user", userService.findNameById(user_id));
             return modelAndView;
         }
->>>>>>> Stashed changes
+
 
         try {
             for(User i : userService.findAll()){

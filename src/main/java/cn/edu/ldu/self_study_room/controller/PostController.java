@@ -1,4 +1,4 @@
-package cn.edu.ldu.self_study_room.config;
+package cn.edu.ldu.self_study_room.controller;
 
 import cn.edu.ldu.self_study_room.entity.Comment;
 import cn.edu.ldu.self_study_room.entity.Notice;

@@ -91,13 +91,15 @@ public class UserController {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        //修改状态
-        seatService.insert(roomId,seatNumber,"2");
-
+//        //修改状态
+      //  seatService.insert(roomId,seatNumber,"2");
+        seatService.update(roomId,seatNumber,"2");
        reservationService.insert(new Reservation(user_id,roomId,seatNumber,datetimes));
+
+
         List<Reservation> search_result;
         try {
-            search_result = reservationService.findAll();
+            search_result = reservationService.findAll(user_id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -197,6 +199,22 @@ public class UserController {
             List<Seat> findstautsbyid = studyRoomService.findstautsbyid(room_id);
 
             modelAndView.addObject("findstautsbyid",findstautsbyid);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return modelAndView;
+    }
+
+
+    @GetMapping("/seachNotice")
+    public ModelAndView seachNotice(HttpSession session,@RequestParam String notice_titile) {
+        // 处理不带参数的逻辑
+        // ...
+        ModelAndView modelAndView = new ModelAndView("user/user_index");
+        try {
+            List<Notice> findbutitile = NoticeService.findbutitile(notice_titile);
+            modelAndView.addObject("alls",findbutitile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

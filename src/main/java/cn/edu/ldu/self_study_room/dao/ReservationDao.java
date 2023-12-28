@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 @Mapper
 public interface ReservationDao {
-    @Select("select * from reservation ")
-    List<Reservation> findAll() throws Exception;
+    @Select("select * from reservation where user_id=#{user_id}")
+    List<Reservation> findAll(@Param("user_id") String user_id) throws Exception;
 
     //增加记录，供管理员发布新通知
     @Insert("insert into reservation(user_id, room_id, seat_number, reserve_time)" +

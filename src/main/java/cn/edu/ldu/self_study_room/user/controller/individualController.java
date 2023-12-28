@@ -4,6 +4,7 @@ import cn.edu.ldu.self_study_room.entity.Favorites;
 import cn.edu.ldu.self_study_room.entity.Reservation;
 import cn.edu.ldu.self_study_room.service.impl.FavoritesServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
+import cn.edu.ldu.self_study_room.service.impl.SeatServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -21,7 +23,8 @@ public class individualController {
     @Autowired
     FavoritesServiceImpl favoritesService;
 
-
+    @Autowired
+    SeatServiceImpl seatService;
     @Autowired
     ReservationServiceImpl reservationService;
     @GetMapping("favorite")
@@ -93,18 +96,17 @@ public class individualController {
     public ModelAndView delete(@RequestParam("room_idDe") int roomId,
                              @RequestParam("seat_numberDe") int seatNumber,
                            HttpSession session) {
-        System.out.println("jinru");
+
         ModelAndView m = new ModelAndView("user/reseration");
 
         try {
-
             System.out.println(session.getAttribute("user_id"));
-            String userId = (String) session.getAttribute("user_id");
-            System.out.println(userId+" "+roomId);
-            reservationService.delete(userId,roomId,seatNumber);
+            String user_id = (String) session.getAttribute("user_id");
+            System.out.println(user_id+" "+roomId);
+            reservationService.delete(user_id,roomId,seatNumber);
             System.out.println("删除完成");
-
-            List<Reservation> search_result = reservationService.findAll();
+            seatService.update(roomId,seatNumber,"1");
+            List<Reservation> search_result = reservationService.findAll(user_id);
             session.setAttribute("seatList",search_result);
             Integer page_size = (search_result.size() % 4 == 0) ? search_result.size() / 4 : (search_result.size() / 4) + 1;
             session.setAttribute("page_size",page_size);
@@ -117,7 +119,21 @@ public class individualController {
                 four_seat=search_result.subList(1*4-4,search_result.size());
 
             }
+            Date currentDate = new Date();
+            long oneDayInMillis = 24 * 60 * 60 * 1000; // 一天的毫秒数
+            List<Integer> overtime = new ArrayList<Integer>();
+            for (Reservation reservation : four_seat) {
+                System.out.println("---------");
+                System.out.println(reservation.getReserve_time());
+                if (currentDate.getTime() - reservation.getReserve_time().getTime() > oneDayInMillis) {
+                    System.out.println("超过一天");
+                    System.out.println(reservation.getSeat_number());
+                    System.out.println(reservation.getReserve_time());
+                    overtime.add(reservation.getSeat_number());
+                }
+            }
 
+            m.addObject("overtime",overtime);
 
             m.addObject("search_result",four_seat);
         } catch (Exception e) {
