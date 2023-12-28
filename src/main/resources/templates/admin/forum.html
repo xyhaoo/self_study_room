@@ -15,6 +15,15 @@
     <link rel="shortcut icon" href="/images/favicon.png"/>
 
 
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        a:link, a:visited {
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 <!-- partial:partials/_navbar.html -->
@@ -67,7 +76,6 @@
     </div>
 </nav>
 
-
 <div class="container-fluid page-body-wrapper">
     <!-- partial:partials/_sidebar.html -->
     <!-- 左侧树形导航栏 -->
@@ -100,22 +108,10 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#user_manage" aria-expanded="false"
-                   aria-controls="ui-basic">
+                <a class="nav-link" href="http://localhost:8881/self_study_room/admin/user_list">
                     <i class="mdi mdi-message-text menu-icon"></i>
                     <span class="menu-title">用户管理</span>
-                    <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="user_manage">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_list">通知列表</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_manager">发布通知</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
 
             <li class="nav-item">
@@ -131,7 +127,7 @@
                                                 href="http://localhost:8881/self_study_room/admin/forum">论坛中心</a>
                         </li>
                         <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/post_publish">发表帖子</a>
+                                                href="http://localhost:8881/self_study_room/admin/post_publish/003">发表帖子</a>
                         </li>
                     </ul>
                 </div>
@@ -140,116 +136,77 @@
         </ul>
     </nav>
 
-    <!--展示通知    -->
+
+    <!-- partial -->
     <div class="main-panel">
+
         <div class="content-wrapper">
-            <!-- 使用Thymeleaf的th:each指令来遍历通知数据 -->
-            <div class="row" th:each="notice, status : ${search_result}">
-                <div class="col-md-12 grid-margin stretch-card">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <!--通知信息 -->
-                            <div class="template-demo">
-                                <div>
-                                    <h3 th:text="${notice.notice_title}"></h3>
-                                    <h5>
-                                        <small class="text-muted" th:text="${notice.notice_time}"></small>
-                                    </h5>
-                                </div>
-                                <div class="template-demo">
-                                    <h4>
-                                        <small class="text-muted" th:text="${notice.notice_content}"></small>
-                                    </h4>
-                                </div>
-                            </div>
-                            <!--删除通知 -->
-                            <div class="col-md-12 d-flex align-items-center delete-icon">
-                                <button class="btn btn-inverse-primary btn-rounded btn-icon" style="margin-left: auto"
-                                        data-toggle="modal" th:data-target="'#modal-' + ${status.index}">
-                                    <i class="mdi mdi-delete-forever"></i>
-                                </button>
-                            </div>
+                            <h1>论坛中心</h1>
+                            <div class="table-responsive">
+                                <div class="col-lg-12 grid-margin stretch-card">
+                                    <i class="mdi mdi-adjust" style="color: dodgerblue"></i>
+                                    <span th:text="${post_num}"></span>
+                                    <small>
+                                        全部帖子
+                                    </small>
 
+                                    <i class="mdi mdi-checkbox-marked-circle-outline"
+                                       style="color: lawngreen"></i>
+                                    <span th:text="${resolved_num}"></span>
+                                    <small class="text-muted">
+                                        已解决
+                                    </small>
+                                </div>
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr th:each="post: ${search_result}">
+                                        <td>
+                                            <span th:if="${post.post_status} == 'unresolved'">
+                                                    <i class="mdi mdi-adjust" style="color: lightslategray"></i></span>
+                                            <span th:if="${post.post_status} == 'resolved'">
+                                                    <i class="mdi mdi-checkbox-marked-circle-outline"
+                                                       style="color: lawngreen"></i></span>
+
+                                        </td>
+                                        <td>
+                                            <a th:href="@{forum/detail/{post_id}(post_id=${post.post_id})}">
+                                                <h3><span th:text="${post.post_title}"></span></h3>
+                                            </a>
+                                            <p>
+                                                <span th:text="'#' + ${post.post_id} + '   '
+                                                    + ${#dates.format(post.post_time, 'yyyy.MM.dd HH:mm:ss')} +
+                                                    '  由 ' + ${post.user_id} + ' 发布'">
+                                                </span>
+                                            </p>
+                                        </td>
+
+                                        <td>
+                                            <span style="float: right;">
+                                                <i class="mdi mdi-message-text-outline"></i>
+                                                <span th:text="${resolved_num}"></span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    </div>
-
-    <!--二次确认的模态框    -->
-    <!--点击删除，二次确认-->
-    <div th:each="notice, status : ${search_result}">
-        <div class="modal fade" th:id="'modal-' + ${status.index}">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>二次确认</h3>
-                        <!--                        <h5 class="modal-title">二次确认</h5>-->
-                        <button class="btn btn-outline-secondary btn-rounded btn-icon" data-dismiss="modal">
-                            <i class="mdi mdi-close"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <h4>
-                            <small class="text-muted">
-                                确定要删除该通知么？
-                            </small>
-                        </h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-light" data-dismiss="modal">取消</button>
-                        <form method="get" action="http://localhost:8881/self_study_room/admin/notice/delete">
-                            <input type="hidden" name="notice_id" th:value="${notice.notice_id}">
-                            <button class="btn btn-danger">删除</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
+        <!-- partial -->
     </div>
+    <!-- main-panel ends -->
 
-    <!-- 返回删除结果的模态框 -->
-    <!-- 还未实现   -->
-    <!--    <div class="modal fade show" id="deleteResultModal" tabindex="-1" role="dialog" aria-hidden="true"-->
-    <!--         th:if="${delete_notice_result != null}">-->
-    <!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
-    <!--            <div class="modal-content">-->
-    <!--                <div class="modal-header">-->
-    <!--                    <h5 class="modal-title">删除结果</h5>-->
-    <!--                    <button class="close" data-dismiss="modal">-->
-    <!--                        <span>&times;</span>-->
-    <!--                    </button>-->
-    <!--                </div>-->
-    <!--                <div class="modal-body">-->
-    <!--                    <p th:text="${delete_notice_result}"></p>-->
-    <!--                </div>-->
-    <!--                <div class="modal-footer">-->
-    <!--                    <button class="btn btn-secondary" data-dismiss="modal">好</button>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!-- content-wrapper ends -->
 
     <!-- main-panel ends -->
 </div>
-
-
-<!--<script th:inline="javascript">-->
-<!--    $('#deleteResultModal').on('shown.bs.modal', function () {-->
-<!--        $('#deleteResultModal').trigger('focus')-->
-<!--    })-->
-<!--</script>-->
-<!--<script th:inline="javascript">-->
-<!--    /* 检查删除结果并显示模态框 */-->
-<!--    /* 如果删除结果不为空，则显示模态框 */-->
-<!--    var deleteResult = [[${delete_notice_result}]];-->
-<!--    if (deleteResult != null) {-->
-<!--        $('#deleteResultModal').modal('show');-->
-<!--    }-->
-<!--</script>-->
 
 
 <!-- plugins:js -->
@@ -270,15 +227,7 @@
 <script src="/js/data-table.js"></script>
 <script src="/js/jquery.dataTables.js"></script>
 <script src="/js/dataTables.bootstrap4.js"></script>
-
-<!-- 引入 jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<!-- 引入 Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<!-- 引入 Bootstrap JavaScript -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- End custom js for this page-->
-
 
 <script src="/js/jquery.cookie.js" type="text/javascript"></script>
 </body>

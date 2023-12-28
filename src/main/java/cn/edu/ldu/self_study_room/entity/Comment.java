@@ -4,17 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Comment {
+    private int comment_id;
     private String post_id;
     private String user_id;
-    private String post_title;
-    private String post_content;
-    private Timestamp post_time;
-    private String post_status;
+    private Timestamp comment_time;
+    private String comment_content;
+    private boolean is_best;
 }

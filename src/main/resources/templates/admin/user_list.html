@@ -101,22 +101,10 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#user_manage" aria-expanded="false"
-                   aria-controls="ui-basic">
+                <a class="nav-link" href="http://localhost:8881/self_study_room/admin/user_list">
                     <i class="mdi mdi-message-text menu-icon"></i>
                     <span class="menu-title">用户管理</span>
-                    <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="user_manage">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_list">用户列表</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_manager">管理</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
 
             <li class="nav-item">
@@ -189,7 +177,7 @@
         <!--点击删除，二次确认-->
         <div th:each="user, status : ${search_result}">
             <div class="modal fade" th:id="'modal-' + ${status.index}">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog">
                     <form method="post" class="forms-sample" action="http://localhost:8881/self_study_room/admin/user_list"
                           onsubmit="return prepareFormData(this)">
                         <div class="modal-content">
@@ -251,6 +239,7 @@
     <!-- main-panel ends -->
 </div>
 
+
 <!--检查模态框中提交的数据是否被修改-->
 <!--如果管理员不修改，则默认提交原来的数据，如果修改，则提交新数据-->
 <script>
@@ -289,7 +278,7 @@
 <script src="/js/dataTables.bootstrap4.js"></script>
 
 <!-- 引入 jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 <!-- 引入 Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <!-- 引入 Bootstrap JavaScript -->
