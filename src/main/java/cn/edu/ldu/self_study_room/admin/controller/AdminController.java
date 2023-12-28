@@ -91,15 +91,15 @@ public class AdminController {
 
     //修改自习室位置状态
     @PostMapping("/room_list")
-    public ModelAndView seatManage(@RequestParam("seat_number")int seat_number,
-                                   @RequestParam("status")String status){
+    public ModelAndView seatManage(@RequestParam("room_id")int room_id,
+                                   @RequestParam(required = false)String status){
         ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/room_list");
 
-        System.out.println(seat_number);
+        System.out.println(room_id);
         System.out.println(status);
 
-        String result = seatService.update(seat_number, status);
-        modelAndView.addObject("result", result);
+//        String result = seatService.update(seat_number, status);
+//        modelAndView.addObject("result", result);
         return modelAndView;
     }
 
