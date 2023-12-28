@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface SeatDao {
 
-//    @Select("select * from seat")
-//    List<Reservation> findAll() throws Exception;
-//
+    @Select("select * from seat")
+    List<Seat> findAll() throws Exception;
+
     @Insert("insert into seat(room_id, seat_number, status)" +
             "values (#{room_id}, #{seat_number}, #{status})")
     void insert(Seat seat) throws Exception;
@@ -22,9 +22,14 @@ public interface SeatDao {
 //                @Param("room_id") int room_id,
 //                @Param("seat_number") int seat_number) throws Exception;
 //
-    @Update("update seat set status=#{status} where room_id=#{room_id} and seat_number=#{seat_number}")
-    void update(@Param("room_id") int room_id,
+    @Update("update seat set status=#{status} where seat_number=#{seat_number}")
+    void update(
                 @Param("seat_number") int seat_number,
                 @Param("status") String status);
+
+
+    @Select("select * from seat where room_id = #{roomId}")
+    List<Seat> findAllByRoomId(int roomId);
+
 
 }

@@ -1,6 +1,6 @@
 package cn.edu.ldu.self_study_room.service.impl;
 
-import cn.edu.ldu.self_study_room.dao.StudyRoomDao;
+import cn.edu.ldu.self_study_room.dao.study_roomDao;
 import cn.edu.ldu.self_study_room.entity.Seat;
 import cn.edu.ldu.self_study_room.entity.StudyRoom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 @Component
-public class StudyRoomServiceImpl implements StudyRoomDao {
+public class StudyRoomServiceImpl implements study_roomDao {
     @Autowired
-    private StudyRoomDao studyRoomDao;
+    private study_roomDao study_roomDao;
     @Override
     public List<StudyRoom> findAll() throws Exception {
-        for (StudyRoom i : studyRoomDao.findAll())
+        for (StudyRoom i : study_roomDao.findAll())
             System.out.println(i);
-        return studyRoomDao.findAll();
+        return study_roomDao.findAll();
     }
 
     @Override
     public List<Seat> findstautsbyid(int room_id) throws Exception {
-        return studyRoomDao.findstautsbyid(room_id);
+        return study_roomDao.findstautsbyid(room_id);
     }
 
     @Override
