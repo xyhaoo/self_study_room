@@ -1,13 +1,7 @@
 package cn.edu.ldu.self_study_room.admin.controller;
 
-import cn.edu.ldu.self_study_room.entity.Comment;
-import cn.edu.ldu.self_study_room.entity.Notice;
-import cn.edu.ldu.self_study_room.entity.Post;
-import cn.edu.ldu.self_study_room.entity.User;
-import cn.edu.ldu.self_study_room.service.impl.CommentServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.NoticeServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.PostServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
+import cn.edu.ldu.self_study_room.entity.*;
+import cn.edu.ldu.self_study_room.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +22,10 @@ public class AdminController {
     private PostServiceImpl postService;
     @Autowired
     private CommentServiceImpl commentService;
+    @Autowired
+    private StudyRoomServiceImpl studyRoomService;
+    @Autowired
+    private SeatServiceImpl seatService;
 
     //通知界面
     //管理员到达该url，立即展示所有通知
@@ -64,6 +62,51 @@ public class AdminController {
     }
 
 
+    //自习室管理界面
+    //管理员到达该url，立即展示所有自习室的座位信息
+    @GetMapping("/room_list")
+    public ModelAndView room_list(){
+        ModelAndView modelAndView = new ModelAndView("admin/room_list");
+        List<StudyRoom> studyRooms;
+        try {
+            studyRooms = studyRoomService.findAll();
+            if (studyRooms.isEmpty()){
+                modelAndView.addObject("search_failed", "暂时没有自习室～");
+            }else {
+                modelAndView.addObject("study_rooms", studyRooms);//所有自习室
+                //再找到所有座位
+                try {
+                    List<Seat> seats;
+                    seats = seatService.findAll();
+                    modelAndView.addObject("seats",seats); //所有位置
+                }catch (Exception e){
+                    modelAndView.addObject("search_failed", "查找异常，请再次尝试。如果此问题依然存在请联系开发者！");
+                }
+            }
+        }catch (Exception e){
+            modelAndView.addObject("search_failed", "查找异常，请再次尝试。如果此问题依然存在请联系开发者！");
+        }
+        return modelAndView;
+    }
+
+    //修改自习室位置状态
+    @PostMapping("/room_list")
+    public ModelAndView seatManage(@RequestParam("seat_number")int seat_number,
+                                   @RequestParam("status")String status){
+        ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/room_list");
+
+        System.out.println(seat_number);
+        System.out.println(status);
+
+        String result = seatService.update(seat_number, status);
+        modelAndView.addObject("result", result);
+        return modelAndView;
+    }
+
+
+
+
+
 
     //用户列表界面
     //管理员到达该url，立即展示所有用户
@@ -94,7 +137,6 @@ public class AdminController {
                                    @RequestParam("phone_number") String phone_number,
                                    @RequestParam("sex") String sex)
     {
-        System.out.println("hello");
         ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/user_list");
 
         if ("delete".equals(choice)){
