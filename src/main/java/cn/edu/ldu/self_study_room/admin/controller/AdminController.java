@@ -145,8 +145,6 @@ public class AdminController {
         List<Comment> comments = commentService.findCommentByPostId(post_id);
         modelAndView.addObject("post",post);    //当前帖子的详细信息
         modelAndView.addObject("comments", comments);   //当前帖子的所有评论
-
-
         //这里需要获取当前用户id
         //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
         //具体url格式为：/forum/detail/{user_id}/{post_id}

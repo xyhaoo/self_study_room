@@ -21,7 +21,6 @@ public class NoticeController {
     @Autowired
     NoticeServiceImpl noticeService;
 
-
     //发布通知
     //获取管理员提交的通知信息，插入notice表，返回发布状态
     @PostMapping
