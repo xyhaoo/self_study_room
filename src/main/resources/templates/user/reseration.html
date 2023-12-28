@@ -176,6 +176,21 @@
 
     <div class="main-panel">
 
+
+
+        <div hidden="hidden" id="overtimeList">
+            <ul   th:each="overtime:${overtime}" >
+                <li  th:text="${overtime}"></li>
+            </ul>
+        </div>
+
+
+
+
+
+
+
+
         <form id="dataForm" action="/self_study_room/user/save"  >
             <input type="hidden" name="room_id" value="" />
             <input type="hidden" name="seat_number" value="" />
@@ -259,6 +274,16 @@
         document.getElementById("turn_page").submit();
     }
 
+    var overtimeseat = [];
+    var ulElement = document.getElementById("overtimeList");
+    var liElements = Array.from(ulElement.getElementsByTagName("li"));
+
+    liElements.forEach(function(li) {
+        overtimeseat.push(li.textContent);
+    });
+
+    console.log(overtimeseat);
+
 
 
     function collectData(button) {
@@ -289,8 +314,6 @@
 
         // 将数据存储在隐藏的 input 元素中
 
-
-
         var form = document.getElementById('dataformdelete');
 
         document.getElementById('room_idDe').value = room_idDe;
@@ -299,6 +322,35 @@
 
         document.getElementById('dataformdelete').submit();
     }
+
+
+    var table = document.getElementById("recent-purchases-listing");
+
+    // 遍历表格中的每一行
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        // 在这里执行你想要对每一行进行的操作
+        // 例如，获取每一行的单元格内容
+        var roomID = row.cells[0].textContent;
+        var seatNumber = row.cells[1].textContent;
+        var reserveTime = row.cells[2].textContent;
+
+        // 创建日期对象
+
+        for(var j = 0;j < liElements.length; j ++){
+
+            var datas =  liElements[j].textContent;
+
+            if (datas === seatNumber) {
+
+                row.style.backgroundColor = "lightblue";
+            }
+        }
+
+
+        // 输出每一行的内容
+        console.log("Room ID: " + roomID + ", Seat Number: " + seatNumber + ", Reserve Time: " + reserveTime);
+    }
+
 </script>
 
 <!-- plugins:js -->

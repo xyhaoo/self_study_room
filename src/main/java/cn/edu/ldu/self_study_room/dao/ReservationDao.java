@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 @Mapper
 public interface ReservationDao {
-    @Select("select * from reservation")
+    @Select("select * from reservation ")
     List<Reservation> findAll() throws Exception;
 
     //增加记录，供管理员发布新通知

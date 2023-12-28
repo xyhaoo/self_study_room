@@ -75,7 +75,6 @@ public class individualController {
                     i.setStatus(status);
                     if(status==null)
                         i.setStatus("available");
-
                     results.add(i);
                 }
             }
