@@ -1,18 +1,18 @@
 package cn.edu.ldu.self_study_room.controller;
 
-import cn.edu.ldu.self_study_room.entity.Comment;
-import cn.edu.ldu.self_study_room.entity.Notice;
-import cn.edu.ldu.self_study_room.entity.Post;
-import cn.edu.ldu.self_study_room.entity.User;
+import cn.edu.ldu.self_study_room.entity.*;
 import cn.edu.ldu.self_study_room.service.CommentService;
 import cn.edu.ldu.self_study_room.service.impl.CommentServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.PostServiceImpl;
+import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +24,10 @@ public class PostController {
     private PostServiceImpl postService;
     @Autowired
     private CommentServiceImpl commentService;
+
+    @Autowired
+    private UserServiceImpl userService;
+
 
 
     //发布帖子
@@ -111,6 +115,30 @@ public class PostController {
 
         //点击按钮提交评论 设置为最优 最优展示不了 发完贴的跳转 评论删除
 
+    }
+    @GetMapping("/registration")
+    public ModelAndView registration(@RequestParam("user_id") String userId,
+                                     @RequestParam("username") String username,
+                                     @RequestParam("phone_number") String phoneNumber,
+                                     @RequestParam("password") String password,
+                                     @RequestParam("sex") String sex,
+                                     @RequestParam(value = "allService", required = false, defaultValue = "false") boolean allService) {
+
+        User u = new User(userId,password,username,phoneNumber,sex);
+        if(("添加用户成功".equals(userService.insert(u)) && allService)){
+            ModelAndView modelAndViewsuccess = new ModelAndView("login");
+            modelAndViewsuccess.addObject("success",true);
+            return modelAndViewsuccess;
+        }
+
+
+        ModelAndView modelAndView = new ModelAndView("registration");
+        modelAndView.addObject("success",false);
+        return modelAndView;
+    }
+    @GetMapping("/entreregistration")
+    public ModelAndView registrationnoargs() {
+        return new ModelAndView("registration");
     }
 
 }
