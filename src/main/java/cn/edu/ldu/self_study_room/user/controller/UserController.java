@@ -1,17 +1,13 @@
 package cn.edu.ldu.self_study_room.user.controller;
 
-import cn.edu.ldu.self_study_room.entity.Notice;
-import cn.edu.ldu.self_study_room.entity.Reservation;
-import cn.edu.ldu.self_study_room.entity.Seat;
+import cn.edu.ldu.self_study_room.entity.*;
 import cn.edu.ldu.self_study_room.service.NoticeService;
-import cn.edu.ldu.self_study_room.service.impl.ReservationServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.SeatServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.StudyRoomServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
+import cn.edu.ldu.self_study_room.service.impl.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +21,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/self_study_room/user")
 public class UserController {
-
+    @Autowired
+    private PostServiceImpl postService;
     @Autowired
     NoticeService NoticeService;
     @Autowired
@@ -37,7 +34,8 @@ public class UserController {
     @Autowired
     SeatServiceImpl seatService;
 
-
+    @Autowired
+    private CommentServiceImpl commentService;
     @GetMapping("/notice")
     public ModelAndView shownotice(){
         ModelAndView m = new ModelAndView("user/user_index");
@@ -176,14 +174,14 @@ public class UserController {
 
 
 
-    @GetMapping("/forum")
-    public ModelAndView fourm(){
-        return new ModelAndView("user/forum");
-    }
-    @GetMapping("/selfforum")
-    public ModelAndView selffourm(){
-        return new ModelAndView("user/selfforum");
-    }
+//    @GetMapping("/forum")
+//    public ModelAndView fourm(){
+//        return new ModelAndView("user/forum");
+//    }
+//    @GetMapping("/selfforum")
+//    public ModelAndView selffourm(){
+//        return new ModelAndView("user/selfforum");
+//    }
 
 
     @GetMapping("/Contreteroom")
@@ -217,6 +215,60 @@ public class UserController {
             modelAndView.addObject("alls",findbutitile);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+
+        return modelAndView;
+    }
+
+
+
+    @GetMapping("/forum")
+    public ModelAndView forum(){
+        ModelAndView modelAndView = new ModelAndView("user/forum");
+
+        List<Post> posts;
+        try {
+            posts = postService.findAll();
+            if (posts.isEmpty()){
+                modelAndView.addObject("search_failed", "暂时没有用户发布帖子～");
+            }else {
+                modelAndView.addObject("search_result", posts);
+                modelAndView.addObject("post_num", posts.size());
+                int resolved_num = 0;
+                for (Post p : posts){
+                    if("resolved".equals(p.getPost_status())){
+                        resolved_num++;
+                    }
+                }
+                modelAndView.addObject("resolved_num", resolved_num);
+            }
+        }catch (Exception e){
+            modelAndView.addObject("search_failed", "查找异常，请再次尝试。如果此问题依然存在请联系开发者！");
+        }
+
+        return modelAndView;
+    }
+
+
+    //帖子详细信息界面
+    //在论坛点击某个帖子进行跳转
+    @GetMapping("/forum/detail/{post_id}")
+    public ModelAndView forum_detail(@PathVariable String post_id,HttpSession session){
+        ModelAndView modelAndView = new ModelAndView("user/post_detail");
+        Post post = postService.searchByPostId(post_id);
+        List<Comment> comments = commentService.findCommentByPostId(post_id);
+        modelAndView.addObject("post",post);    //当前帖子的详细信息
+        modelAndView.addObject("comments", comments);   //当前帖子的所有评论
+        //这里需要获取当前用户id
+        //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
+        //具体url格式为：/forum/detail/{user_id}/{post_id}
+        String user_id = "003";
+        String user_od = (String) session.getAttribute("user_id");
+        //判断被查看详细信息打开的帖子是不是当前用户的,方便对帖子发起者有筛选优质评论的权限
+        if (user_id.equals(post.getUser_id())){
+            modelAndView.addObject("is_your_post", "true");
+        }else {
+            modelAndView.addObject("is_your_post", "false");
         }
 
         return modelAndView;

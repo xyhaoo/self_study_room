@@ -155,81 +155,94 @@
         </ul>
     </nav>
 
-    <!-- partial -->
-    <div class="main-panel">
 
+    <div class="main-panel   documentation">
         <div class="content-wrapper">
-            <div class="row">
-                <div class="col-lg-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1>论坛中心</h1>
-                            <div class="table-responsive">
-                                <div class="col-lg-12 grid-margin stretch-card">
-                                    <i class="mdi mdi-adjust" style="color: dodgerblue"></i>
-                                    <span th:text="${post_num}"></span>
-                                    <small>
-                                        全部帖子
-                                    </small>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 doc-header">
+                        <h1 class="text-primary mt-4">帖子详情</h1>
+                    </div>
+                </div>
+                <div class="row doc-content">
+                    <div class="col-12 col-md-10 offset-md-1">
+                        <div class="col-12 grid-margin" id="doc-intro">
+                            <div class="card">
 
-                                    <i class="mdi mdi-checkbox-marked-circle-outline"
-                                       style="color: lawngreen"></i>
-                                    <span th:text="${resolved_num}"></span>
-                                    <small class="text-muted">
-                                        已解决
-                                    </small>
+
+                                <div class="card-body">
+                                    <h3 class="mb-4 mt-4" th:text="${post.post_title}"></h3>
+                                    <p th:text="${post.post_content}"></p>
+                                    <p th:text="${post.post_time}"></p>
                                 </div>
-                                <table class="table table-hover">
-                                    <tbody>
-                                    <tr th:each="post: ${search_result}">
-                                        <td>
-                                            <span th:if="${post.post_status} == 'unresolved'">
-                                                    <i class="mdi mdi-adjust" style="color: lightslategray"></i></span>
-                                            <span th:if="${post.post_status} == 'resolved'">
-                                                    <i class="mdi mdi-checkbox-marked-circle-outline"
-                                                       style="color: lawngreen"></i></span>
+                            </div>
+                        </div>
 
-                                        </td>
-                                        <td>
-                                            <a th:href="@{forum/detail/{post_id}(post_id=${post.post_id})}">
-                                                <h3><span th:text="${post.post_title}"></span></h3>
-                                            </a>
-                                            <p>
-                                                <span th:text="'#' + ${post.post_id} + '   '
-                                                    + ${#dates.format(post.post_time, 'yyyy.MM.dd HH:mm:ss')} +
-                                                    '  由 ' + ${post.user_id} + ' 发布'">
-                                                </span>
-                                            </p>
-                                        </td>
+                        <div class="col-12 grid-margin" id="doc-started" th:unless="${#lists.isEmpty(comments)}">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:each="comment: ${comments}">
+                                        <h3 class="mb-4" th:text="${comment.user_id}"></h3>
+                                        <div th:if="${comment._best != 1}">
+                                            <p th:text="${comment.comment_content}"></p>
+                                        </div>
 
-                                        <td>
-                                            <span style="float: right;">
-                                                <i class="mdi mdi-message-text-outline"></i>
-                                                <span th:text="${resolved_num}"></span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                        <!--判断是否为优质回答，是就渲染这个-->
+                                        <div class="alert alert-success mt-4 d-flex align-items-center" role="alert"
+                                             th:if="${comment._best == 1}">
+                                            <i class="ti-info-alt me-4"></i>
+                                            <p th:text="${comment.comment_content}"></p>
+                                        </div>
+
+                                        <!--这里输出评论时间-->
+                                        <p class="d-inline"><strong th:text="${comment.comment_time}"></strong></p>
+
+                                        <div style="text-align: right; display: flex;">
+                                            <div th:if="${is_your_post == 'true'}">
+                                                <button type="button" class="btn btn-outline-success btn-fw">设置为最优回答</button>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-danger btn-fw">删除</button>
+                                        </div>
+
+                                        <hr class="mt-5">
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
+        <!-- partial:../partials/_footer.html -->
+
+        <!-- partial -->
+<!--        评论的区域-->
+        <div style="margin: 0 auto;width: 100%" >
+            <form>
+                <input hidden="hidden" id="post_id" name="post_id">
+                <textarea style="width: 60%;height: 150px" name="comment_content" id="comment_content"></textarea>
+                <button type="submit"></button>
+            </form>
+
         </div>
 
 
 
-        <!-- partial -->
+
     </div>
-    <!-- main-panel ends -->
+
+
 
 </div>
 
 
 </div>
 
+
+
+
+</script>
 
 <!-- plugins:js -->
 <script src="/vendors/base/vendor.bundle.base.js"></script>
