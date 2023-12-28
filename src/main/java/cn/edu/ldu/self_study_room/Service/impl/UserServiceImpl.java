@@ -50,4 +50,18 @@ public class UserServiceImpl implements UserService {
             return "修改用户信息失败";
         }
     }
+
+    @Override
+    public User findNameById(String user_id) {
+        User user;
+        try {
+            user = userDao.findNameById(user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return user;
+    }
+
+
 }

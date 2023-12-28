@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/self_study_room/")
@@ -47,9 +48,16 @@ public class loginpage {
         System.out.println("Password: " + password);
 
         if(user_id.equals("admin") && password.equals("123456")){
+<<<<<<< Updated upstream
             return new ModelAndView("admin/admin_index");
         }
 
+=======
+            ModelAndView modelAndView = new ModelAndView("admin/admin_index");
+            modelAndView.addObject("cur_user", userService.findNameById(user_id));
+            return modelAndView;
+        }
+>>>>>>> Stashed changes
 
         try {
             for(User i : userService.findAll()){

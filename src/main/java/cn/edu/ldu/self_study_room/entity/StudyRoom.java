@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudyRoom {
-    int room_id;
-    String room_picture;
-    String room_content;
-    int room_volume;
+    private int room_id;
+    private String room_picture;
+    private String room_content;
+    private int room_volume;
 }

@@ -1,8 +1,12 @@
 package cn.edu.ldu.self_study_room.admin.controller;
 
+import cn.edu.ldu.self_study_room.entity.Comment;
 import cn.edu.ldu.self_study_room.entity.Notice;
+import cn.edu.ldu.self_study_room.entity.Post;
 import cn.edu.ldu.self_study_room.entity.User;
+import cn.edu.ldu.self_study_room.service.impl.CommentServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.NoticeServiceImpl;
+import cn.edu.ldu.self_study_room.service.impl.PostServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,10 @@ public class AdminController {
     private NoticeServiceImpl noticeService;
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private PostServiceImpl postService;
+    @Autowired
+    private CommentServiceImpl commentService;
 
     //通知界面
     //管理员到达该url，立即展示所有通知
@@ -39,7 +47,6 @@ public class AdminController {
         }
         return modelAndView;
     }
-
 
     // 删除通知
     @GetMapping(value = "/notice/delete")
@@ -76,7 +83,6 @@ public class AdminController {
         }
 
         return modelAndView;
-
     }
 
     // 删除或修改用户信息
@@ -100,18 +106,73 @@ public class AdminController {
     }
 
 
-    //论坛中心界面 包含对帖子对管理
+    //论坛中心界面
+    //管理员到达该url，立即展示所有帖子的信息
     @GetMapping("/forum")
     public ModelAndView forum(){
-        return new ModelAndView("admin/admin_forum");
+        ModelAndView modelAndView = new ModelAndView("admin/forum");
+
+        List<Post> posts;
+        try {
+            posts = postService.findAll();
+            if (posts.isEmpty()){
+                modelAndView.addObject("search_failed", "暂时没有用户发布帖子～");
+            }else {
+                modelAndView.addObject("search_result", posts);
+                modelAndView.addObject("post_num", posts.size());
+                int resolved_num = 0;
+                for (Post p : posts){
+                    if("resolved".equals(p.getPost_status())){
+                        resolved_num++;
+                    }
+                }
+                modelAndView.addObject("resolved_num", resolved_num);
+            }
+        }catch (Exception e){
+            modelAndView.addObject("search_failed", "查找异常，请再次尝试。如果此问题依然存在请联系开发者！");
+        }
+
+        return modelAndView;
+    }
+
+
+    //帖子详细信息界面
+    //在论坛点击某个帖子进行跳转
+    @GetMapping("/forum/detail/{post_id}")
+    public ModelAndView forum_detail(@PathVariable String post_id){
+        ModelAndView modelAndView = new ModelAndView("admin/post_detail");
+        Post post = postService.searchByPostId(post_id);
+        List<Comment> comments = commentService.findCommentByPostId(post_id);
+        modelAndView.addObject("post",post);    //当前帖子的详细信息
+        modelAndView.addObject("comments", comments);   //当前帖子的所有评论
+
+
+        //这里需要获取当前用户id
+        //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
+        //具体url格式为：/forum/detail/{user_id}/{post_id}
+        String user_id = "003";
+        //判断被查看详细信息打开的帖子是不是当前用户的,方便对帖子发起者有筛选优质评论的权限
+        if (user_id.equals(post.getUser_id())){
+            modelAndView.addObject("is_your_post", "true");
+        }else {
+            modelAndView.addObject("is_your_post", "false");
+        }
+
+
+
+        return modelAndView;
     }
 
 
 
     //发帖界面
-    @GetMapping("/post_publish")
-    public ModelAndView post_publish(){
-        return new ModelAndView("post_publish");
+    //管理员点击按钮，跳转到帖子发布页面，进入该页面后，显示发布相关操作
+    @GetMapping("/post_publish/{user_id}")
+    public ModelAndView post_publish(@PathVariable("user_id") String user_id){
+        ModelAndView modelAndView = new ModelAndView("admin/post_publish");
+        userService.findNameById(user_id);
+        modelAndView.addObject("cur_user", userService.findNameById(user_id));
+        return modelAndView;
     }
 
 

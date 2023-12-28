@@ -100,23 +100,12 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#user_manage" aria-expanded="false"
-                   aria-controls="ui-basic">
+                <a class="nav-link" href="http://localhost:8881/self_study_room/admin/user_list">
                     <i class="mdi mdi-message-text menu-icon"></i>
                     <span class="menu-title">用户管理</span>
-                    <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="user_manage">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_list">通知列表</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/user_manager">发布通知</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#forum_manage" aria-expanded="false"
                    aria-controls="ui-basic">
@@ -130,7 +119,7 @@
                                                 href="http://localhost:8881/self_study_room/admin/forum">论坛中心</a>
                         </li>
                         <li class="nav-item"><a class="nav-link"
-                                                href="http://localhost:8881/self_study_room/admin/post_publish">发表帖子</a>
+                                                href="http://localhost:8881/self_study_room/admin/post_publish/003">发表帖子</a>
                         </li>
                     </ul>
                 </div>
@@ -236,21 +225,6 @@
 </div>
 
 
-<!--<script th:inline="javascript">-->
-<!--    $('#deleteResultModal').on('shown.bs.modal', function () {-->
-<!--        $('#deleteResultModal').trigger('focus')-->
-<!--    })-->
-<!--</script>-->
-<!--<script th:inline="javascript">-->
-<!--    /* 检查删除结果并显示模态框 */-->
-<!--    /* 如果删除结果不为空，则显示模态框 */-->
-<!--    var deleteResult = [[${delete_notice_result}]];-->
-<!--    if (deleteResult != null) {-->
-<!--        $('#deleteResultModal').modal('show');-->
-<!--    }-->
-<!--</script>-->
-
-
 <!-- plugins:js -->
 <script src="/vendors/base/vendor.bundle.base.js"></script>
 <!-- endinject -->
@@ -271,7 +245,7 @@
 <script src="/js/dataTables.bootstrap4.js"></script>
 
 <!-- 引入 jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 <!-- 引入 Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <!-- 引入 Bootstrap JavaScript -->
