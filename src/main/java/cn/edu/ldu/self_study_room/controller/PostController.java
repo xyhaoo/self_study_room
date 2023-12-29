@@ -7,7 +7,6 @@ import cn.edu.ldu.self_study_room.entity.User;
 import cn.edu.ldu.self_study_room.service.CommentService;
 import cn.edu.ldu.self_study_room.service.impl.CommentServiceImpl;
 import cn.edu.ldu.self_study_room.service.impl.PostServiceImpl;
-import cn.edu.ldu.self_study_room.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,8 +24,6 @@ public class PostController {
     private PostServiceImpl postService;
     @Autowired
     private CommentServiceImpl commentService;
-    @Autowired
-    private UserServiceImpl userService;
 
 
     //发布帖子
@@ -37,12 +34,6 @@ public class PostController {
                                     @RequestParam String post_title,
                                     @RequestParam String post_content)
     {
-        System.out.println("发帖提交");
-        System.out.println("用户名"+user_id);
-
-
-
-        String user_name = userService.findById(user_id).getUser_name();
         String post_id;
         //插入的通知记录，其id是现有通知中id最大值+1，如果当前没有通知，其值为1
         try {
@@ -73,21 +64,15 @@ public class PostController {
         LocalDateTime currentDateTime = LocalDateTime.now();
         Timestamp now = Timestamp.valueOf(currentDateTime);
         String status = postService.insert(new Post(post_id, user_id, post_title, post_content, now, "unresolved"));
-        ModelAndView modelAndView;
-        if ("admin".equals(user_name)){
-            modelAndView = new ModelAndView("admin/post_publish");
-        }else {
-            modelAndView = new ModelAndView("user/post_publish");
-        }
+        ModelAndView modelAndView = new ModelAndView("admin/post_publish");
         modelAndView.addObject("status", status);
         return modelAndView;
     }
 
 
     //写评论、帖子所有者将评论设置为最优、帖子所有者或管理员删除评论、帖子所有者或管理员删除帖子
-    @PostMapping(value = {"/admin/{user_id}/forum/detail/{post_id}", "/user/{user_id}/forum/detail/{post_id}"})
+    @PostMapping("/admin/forum/detail/{post_id}")
     public ModelAndView postDetail(@RequestParam("choice")String choice,
-                                   @RequestParam("choice")String user_name,
                                    @RequestParam("user_id")String user_id,
                                    @RequestParam(required = false)int comment_id,
                                    @PathVariable("post_id")String post_id,
@@ -99,17 +84,10 @@ public class PostController {
 //        String user_id = "003";
         ModelAndView modelAndView = null;
         String status = null;
-//        String user_name = userService.findById(user_id).getUser_name();
         switch (choice) {
             case "publish_comment" -> { //写评论
-
-                if ("admin".equals(user_name)){
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/admin/"+user_id+"/forum/detail/"+post_id);
-                }else {
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/user/"+user_id+"/forum/detail/"+post_id);
-                }
-
-
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
+                System.out.println("1");
                 int next_comment_id = 0;
                 //插入的评论记录，其id是现有通知中id最大值+1，如果当前没有评论，其值为1
                 try {
@@ -136,33 +114,17 @@ public class PostController {
                 status = commentService.insert(next_comment_id, post_id, user_id, now, comment_content, false);
             }
             case "set_best_answer" -> { //设为优质回答
-                if ("admin".equals(user_name)){
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/admin/"+user_id+"/forum/detail/"+post_id);
-                }else {
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/user/"+user_id+"/forum/detail/"+post_id);
-                }
-
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
                 System.out.println("2");
                 status = commentService.update(comment_id, 1);
             }
             case "delete_comment" -> { //帖子所有者或管理员删除评论
-                if ("admin".equals(user_name)){
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/admin/"+user_id+"/forum/detail/"+post_id);
-                }else {
-                    modelAndView = new ModelAndView("redirect:http://localhost:8881/self_study_room/user/"+user_id+"/forum/detail/"+post_id);
-                }
-
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
                 System.out.println("3");
                 status = commentService.delete(comment_id);
             }
             case "delete_post" -> { //帖子所有者或管理员删除帖子
-                if ("admin".equals(user_name)){
-                    modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum");
-                }else {
-                    modelAndView = new ModelAndView("redirect:/self_study_room/user/forum");
-                }
-
-//                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum");
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum");
                 System.out.println("4");
                 status = postService.delete(post_id);
             }
@@ -170,7 +132,7 @@ public class PostController {
         if (modelAndView != null){
             modelAndView.addObject("status", status);
         }
-        modelAndView.addObject("user_name",user_name);
+
         return modelAndView;
 
         //设置为最优 发完贴的跳转 评论删除

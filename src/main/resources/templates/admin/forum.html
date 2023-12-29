@@ -173,9 +173,7 @@
 
                                         </td>
                                         <td>
-                                            <a
-                                                    th:href="@{'http://localhost:8881/self_study_room/admin/' + ${post.key.user_id} + '/forum/detail/' + ${post.key.post_id}}"
-                                            >
+                                            <a th:href="@{forum/detail/{post_id}(post_id=${post.key.post_id})}">
                                                 <h3><span th:text="${post.key.post_title}"></span></h3>
                                             </a>
                                             <p>

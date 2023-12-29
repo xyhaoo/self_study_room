@@ -2,6 +2,7 @@ package cn.edu.ldu.self_study_room.service;
 
 
 import cn.edu.ldu.self_study_room.entity.Comment;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 
@@ -12,6 +13,8 @@ public interface CommentService {
     //查询所有帖子
     List<Comment> findAll();
 
+    //根据帖子编号查询帖子
+    Comment searchByCommentId(int comment_id);
 
 
     //查询某个帖子的所有评论
@@ -24,6 +27,12 @@ public interface CommentService {
                 Timestamp comment_time,
                 String comment_content,
                 boolean is_best) throws Exception;
+
+    //更改评论状态
+    String update(int comment_id, int is_best);
+
+    //删除评论
+    String delete(int comment_id);
 
 
 }

@@ -47,16 +47,15 @@ public class UserServiceImpl implements UserService {
             userDao.update(user_id, user_name, password, phone_number, sex);
             return "修改用户信息成功";
         } catch (Exception e) {
-            e.printStackTrace();
             return "修改用户信息失败";
         }
     }
 
     @Override
-    public User findNameById(String user_id) {
+    public User findById(String user_id) {
         User user;
         try {
-            user = userDao.findNameById(user_id);
+            user = userDao.findById(user_id);
         }catch (Exception e){
             e.printStackTrace();
             return null;
