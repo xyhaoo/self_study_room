@@ -84,51 +84,50 @@ public class PostController {
 //        String user_id = "003";
         ModelAndView modelAndView = null;
         String status = null;
-        if (choice.equals("publish_comment")){//写评论
-            modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/"+post_id);
-            System.out.println("1");
-
-            int next_comment_id = 0;
-            //插入的评论记录，其id是现有通知中id最大值+1，如果当前没有评论，其值为1
-            try {
-                List<Comment> comments = commentService.findAll();
-                for (Comment comment : comments) {
-                    int cur_id = comment.getComment_id();
-                    if (cur_id > next_comment_id) {
-                        next_comment_id = cur_id;
+        switch (choice) {
+            case "publish_comment" -> { //写评论
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
+                System.out.println("1");
+                int next_comment_id = 0;
+                //插入的评论记录，其id是现有通知中id最大值+1，如果当前没有评论，其值为1
+                try {
+                    List<Comment> comments = commentService.findAll();
+                    for (Comment comment : comments) {
+                        int cur_id = comment.getComment_id();
+                        if (cur_id > next_comment_id) {
+                            next_comment_id = cur_id;
+                        }
                     }
+                    next_comment_id += 1;
+                } catch (Exception e) {
+                    //findAll方法异常，出现此类型的通知id时，应该修正findAll
+                    Random random = new Random();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < 32; i++) {
+                        int digit = random.nextInt(10); // 生成 0 到 9 之间的随机数字
+                        sb.append(digit);
+                    }
+                    post_id = sb.toString();
                 }
-                next_comment_id+=1;
-            }catch (Exception e){
-                //findAll方法异常，出现此类型的通知id时，应该修正findAll
-                Random random = new Random();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < 32; i++) {
-                    int digit = random.nextInt(10); // 生成 0 到 9 之间的随机数字
-                    sb.append(digit);
-                }
-                post_id = sb.toString();
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                Timestamp now = Timestamp.valueOf(currentDateTime);
+                status = commentService.insert(next_comment_id, post_id, user_id, now, comment_content, false);
             }
-
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            Timestamp now = Timestamp.valueOf(currentDateTime);
-
-            status = commentService.insert(next_comment_id, post_id, user_id, now, comment_content, false);
-        }else if (choice.equals("set_best_answer")){//设为优质回答
-            modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/"+post_id);
-            System.out.println("2");
-
-            status = commentService.update(comment_id, 1);
-        }else if (choice.equals("delete_comment")){//帖子所有者或管理员删除评论
-            modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/"+post_id);
-            System.out.println("3");
-
-            status = commentService.delete(comment_id);
-        }else if (choice.equals("delete_post")){//帖子所有者或管理员删除帖子
-            modelAndView  = new ModelAndView("redirect:/self_study_room/admin/forum");
-            System.out.println("4");
-
-            status = postService.delete(post_id);
+            case "set_best_answer" -> { //设为优质回答
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
+                System.out.println("2");
+                status = commentService.update(comment_id, 1);
+            }
+            case "delete_comment" -> { //帖子所有者或管理员删除评论
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum/detail/" + post_id);
+                System.out.println("3");
+                status = commentService.delete(comment_id);
+            }
+            case "delete_post" -> { //帖子所有者或管理员删除帖子
+                modelAndView = new ModelAndView("redirect:/self_study_room/admin/forum");
+                System.out.println("4");
+                status = postService.delete(post_id);
+            }
         }
         if (modelAndView != null){
             modelAndView.addObject("status", status);
