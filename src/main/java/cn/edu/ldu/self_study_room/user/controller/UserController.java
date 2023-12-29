@@ -14,9 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/self_study_room/user")
@@ -219,7 +217,8 @@ public class UserController {
     }
 
 
-
+    //论坛中心界面
+    //管理员到达该url，立即展示所有帖子的信息
     @GetMapping("/forum")
     public ModelAndView forum(){
         ModelAndView modelAndView = new ModelAndView("user/forum");
@@ -230,6 +229,18 @@ public class UserController {
             if (posts.isEmpty()){
                 modelAndView.addObject("search_failed", "暂时没有用户发布帖子～");
             }else {
+                //找到每个帖子对应的回复数
+                ArrayList<Integer> reply_nums = new ArrayList<>();
+                for(Post post: posts){
+                    reply_nums.add(commentService.findCommentByPostId(post.getPost_id()).size());
+                }
+                Map<Post, Integer> map = new HashMap<>();
+                for (int i = 0; i < posts.size();i++){
+                    map.put(posts.get(i), reply_nums.get(i));
+                }
+
+                modelAndView.addObject("post_map", map);
+                modelAndView.addObject("reply_nums", reply_nums);
                 modelAndView.addObject("search_result", posts);
                 modelAndView.addObject("post_num", posts.size());
                 int resolved_num = 0;
@@ -248,29 +259,88 @@ public class UserController {
     }
 
 
+
+
     //帖子详细信息界面
     //在论坛点击某个帖子进行跳转
-    @GetMapping("/forum/detail/{post_id}")
-    public ModelAndView forum_detail(@PathVariable String post_id,HttpSession session){
+//    @GetMapping("/forum/detail/{post_id}")
+//    public ModelAndView forum_detail(@PathVariable String post_id,HttpSession session){
+//        ModelAndView modelAndView = new ModelAndView("user/post_detail");
+//        Post post = postService.searchByPostId(post_id);
+//        List<Comment> comments = commentService.findCommentByPostId(post_id);
+//        modelAndView.addObject("post",post);    //当前帖子的详细信息
+//        modelAndView.addObject("comments", comments);   //当前帖子的所有评论
+//        //这里需要获取当前用户id
+//        //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
+//        //具体url格式为：/forum/detail/{user_id}/{post_id}
+//        String user_id = "003";
+//        String user_od = (String) session.getAttribute("user_id");
+//        //判断被查看详细信息打开的帖子是不是当前用户的,方便对帖子发起者有筛选优质评论的权限
+//        if (user_id.equals(post.getUser_id())){
+//            modelAndView.addObject("is_your_post", "true");
+//        }else {
+//            modelAndView.addObject("is_your_post", "false");
+//        }
+//
+//        return modelAndView;
+//    }
+
+
+    //帖子详细信息界面
+    //在论坛点击某个帖子进行跳转
+    @GetMapping("/{user_id}/forum/detail/{post_id}")
+    public ModelAndView forum_detail(@PathVariable String user_id, @PathVariable String post_id){
         ModelAndView modelAndView = new ModelAndView("user/post_detail");
         Post post = postService.searchByPostId(post_id);
         List<Comment> comments = commentService.findCommentByPostId(post_id);
         modelAndView.addObject("post",post);    //当前帖子的详细信息
         modelAndView.addObject("comments", comments);   //当前帖子的所有评论
+
         //这里需要获取当前用户id
         //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
         //具体url格式为：/forum/detail/{user_id}/{post_id}
-        String user_id = "003";
-        String user_od = (String) session.getAttribute("user_id");
-        //判断被查看详细信息打开的帖子是不是当前用户的,方便对帖子发起者有筛选优质评论的权限
-        if (user_id.equals(post.getUser_id())){
-            modelAndView.addObject("is_your_post", "true");
-        }else {
-            modelAndView.addObject("is_your_post", "false");
-        }
+//         user_id = (String) session.getAttribute("user_id");
+        modelAndView.addObject("cur_user", userService.findById(user_id));
+        modelAndView.addObject("user_name", userService.findById(user_id).getUser_name());
+//        modelAndView.addObject("user_id", userService.findById(user_id).getUser_id());
 
+
+        //判断当前帖子是否有最优回答，方便前端展示最优回答，以及不再渲染“设置为优质评论”按钮
+        String has_best_answer = "false";
+        for(Comment comment : comments){
+            if (comment.is_best()){
+                has_best_answer = "true";
+                break;
+            }
+            else {
+                has_best_answer = "false";
+            }
+        }
+        modelAndView.addObject("has_best_answer", has_best_answer);
+
+        //现在前端拥有帖子详细界面里这个帖子的信息、这个帖子所有评论的信息，当前查看这个帖子的用户的信息、这条帖子有无最佳评论的判断
         return modelAndView;
     }
+
+
+    //发帖界面
+    //用户点击按钮，跳转到帖子发布页面，进入该页面后，显示发布相关操作
+    @GetMapping("/post_publish")
+    public ModelAndView post_publish(HttpSession session){
+        String user_id = (String) session.getAttribute("user_id");
+        ModelAndView modelAndView = new ModelAndView("user/post_publish");
+
+
+        System.out.println("进入发帖界面");
+        System.out.println(user_id);
+        modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("cur_user", userService.findById(user_id));
+        return modelAndView;
+    }
+
+
+
+
 
 
 }

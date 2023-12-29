@@ -130,7 +130,7 @@
 
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" href="http://localhost:8881/self_study_room/user/forum">论坛中心</a></li>
-                        <li class="nav-item"> <a class="nav-link"  href="http://localhost:8881/self_study_room/user/selfforum">论坛管理</a></li>
+                        <li class="nav-item"> <a class="nav-link"  href="http://localhost:8881/self_study_room/user/post_publish">发表帖子</a></li>
                     </ul>
 
                 </div>
@@ -181,32 +181,34 @@
                                 </div>
                                 <table class="table table-hover">
                                     <tbody>
-                                    <tr th:each="post: ${search_result}">
+                                    <tr th:each="post, index: ${post_map}">
                                         <td>
-                                            <span th:if="${post.post_status} == 'unresolved'">
+                                            <span th:if="${post.key.post_status} == 'unresolved'">
                                                     <i class="mdi mdi-adjust" style="color: lightslategray"></i></span>
-                                            <span th:if="${post.post_status} == 'resolved'">
+                                            <span th:if="${post.key.post_status} == 'resolved'">
                                                     <i class="mdi mdi-checkbox-marked-circle-outline"
                                                        style="color: lawngreen"></i></span>
 
                                         </td>
                                         <td>
-                                            <a th:href="@{forum/detail/{post_id}(post_id=${post.post_id})}">
-                                                <h3><span th:text="${post.post_title}"></span></h3>
+                                            <a
+                                                    th:href="@{'http://localhost:8881/self_study_room/user/' + ${post.key.user_id} + '/forum/detail/' + ${post.key.post_id}}"
+                                            >
+                                                <h3><span th:text="${post.key.post_title}"></span></h3>
                                             </a>
                                             <p>
-                                                <span th:text="'#' + ${post.post_id} + '   '
-                                                    + ${#dates.format(post.post_time, 'yyyy.MM.dd HH:mm:ss')} +
-                                                    '  由 ' + ${post.user_id} + ' 发布'">
+                                                <span th:text="'#' + ${post.key.post_id} + '   '
+                                                    + ${#dates.format(post.key.post_time, 'yyyy.MM.dd HH:mm:ss')} +
+                                                    '  由 ' + ${post.key.user_id} + ' 发布'">
                                                 </span>
                                             </p>
                                         </td>
 
                                         <td>
-                                            <span style="float: right;">
-                                                <i class="mdi mdi-message-text-outline"></i>
-                                                <span th:text="${resolved_num}"></span>
-                                            </span>
+                                            <div style="display: flex; align-items: center;">
+                                                <i class="mdi mdi-message-text-outline" style="margin-right: 5px;"></i>
+                                                <span th:text="${post.value}"></span>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -218,9 +220,6 @@
 
             </div>
         </div>
-
-
-
         <!-- partial -->
     </div>
     <!-- main-panel ends -->

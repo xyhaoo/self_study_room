@@ -62,7 +62,7 @@ public class loginpage {
                 throw new RuntimeException(e);
             }
 
-            modelAndView.addObject("cur_user", userService.findNameById(user_id));
+            modelAndView.addObject("cur_user", userService.findById(user_id));
             return modelAndView;
         }
 

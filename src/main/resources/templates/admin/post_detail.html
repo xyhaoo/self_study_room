@@ -141,6 +141,15 @@
                                     <h3 class="mb-4 mt-4" th:text="${post.post_title}"></h3>
                                     <p th:text="${post.post_content}"></p>
                                     <p th:text="${post.post_time}"></p>
+                                    <!--如果当前用户是这个帖子的主人，或当前用户为管理员-->
+                                    <div th:if="${post.user_id == cur_user.user_id} or ${cur_user.user_id == '003'}">
+                                        <form method="post">
+                                            <button type="submit" class="btn btn-outline-danger btn-fw"
+                                                    name="choice" value="delete_post">删帖</button>
+                                            <input type="hidden" name="user_id" th:value="${cur_user.user_id}">
+                                            <input type="hidden" name="comment_id" value="0">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,26 +158,47 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div th:each="comment: ${comments}">
-                                        <h3 class="mb-4" th:text="${comment.user_id}"></h3>
-                                        <div th:if="${comment._best != 1}">
+                                        <h3 class="mb-4" th:text="${comment.user_id} + ' 回答了： '"></h3>
+                                        <div th:unless="${comment._best}">
                                             <p th:text="${comment.comment_content}"></p>
                                         </div>
 
                                         <!--判断是否为优质回答，是就渲染这个-->
-                                        <div class="alert alert-success mt-4 d-flex align-items-center" role="alert"
-                                             th:if="${comment._best == 1}">
-                                            <i class="ti-info-alt me-4"></i>
-                                            <p th:text="${comment.comment_content}"></p>
+                                        <div th:if="${comment._best}">
+                                            <div class="alert alert-success mt-4 d-flex align-items-center" >
+                                                <p th:text="${comment.comment_content}"></p>
+                                            </div>
+                                            <div>
+                                                <p style="color: gold;">被发帖人设为了优质回答</p>
+                                            </div>
                                         </div>
 
                                         <!--这里输出评论时间-->
                                         <p class="d-inline"><strong th:text="${comment.comment_time}"></strong></p>
 
+
+
                                         <div style="text-align: right; display: flex;">
-                                            <div th:if="${is_your_post == 'true'}">
-                                                <button type="button" class="btn btn-outline-success btn-fw">设置为最优回答</button>
+                                            <!--如果当前这个帖子没有最优回答，并且当前用户是这个帖子的主人 且 被设置的评论不是这个帖子的主人-->
+                                            <div th:if="${post.user_id == cur_user.user_id} and
+                                                        ${has_best_answer == 'false'} and
+                                                        ${post.user_id} != ${comment.user_id}">
+                                                <form method="post">
+                                                    <button type="submit" class="btn btn-outline-success btn-fw"
+                                                            name="choice" value="set_best_answer">设置为最优回答</button>
+                                                    <input type="hidden" name="comment_id" th:value="${comment.comment_id}">
+                                                    <input type="hidden" name="user_id" th:value="${cur_user.user_id}">
+                                                </form>
                                             </div>
-                                            <button type="button" class="btn btn-outline-danger btn-fw">删除</button>
+                                            <!--如果当前用户是这个帖子的主人，或当前用户为管理员-->
+                                            <div th:if="${post.user_id == cur_user.user_id} or ${cur_user.user_id == '003'}">
+                                                <form method="post">
+                                                    <button type="submit" class="btn btn-outline-danger btn-fw"
+                                                            name="choice" value="delete_comment">删除</button>
+                                                    <input type="hidden" name="comment_id" th:value="${comment.comment_id}">
+                                                    <input type="hidden" name="user_id" th:value="${cur_user.user_id}">
+                                                </form>
+                                            </div>
                                         </div>
 
                                         <hr class="mt-5">
@@ -186,14 +216,16 @@
         <!-- partial -->
 
         <footer class="footer">
-            <form class="forms-sample" method="post">
+            <form class="forms-sample" method="post"
+                  th:action="@{'http://localhost:8881/self_study_room/admin/' + ${user_id} + '/forum/detail/' + ${post_id}}">
                 <div class="form-group">
                     <label for="exampleTextarea1">评论</label>
                     <textarea class="form-control" id="exampleTextarea1" rows="4"
                               placeholder="请填写评论内容" name="comment_content"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary me-2">发表</button>
-
+                <input type="hidden" name="user_id" th:value="${cur_user.user_id}">
+                <input type="hidden" name="comment_id" value="0">
+                <button type="submit" class="btn btn-primary me-2" name="choice" value="publish_comment">发表</button>
             </form>
         </footer>
     </div>
