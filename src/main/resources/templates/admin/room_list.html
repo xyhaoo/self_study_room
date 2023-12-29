@@ -137,6 +137,14 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title">座位列表</h1>
+                    <form action="http://localhost:8881/self_study_room/admin/searchseat" method="post">
+                        <input type="text" placeholder="房间号" name="room_id">
+                        <input type="text" placeholder="最小的座位号" name="minseat_number">
+                        <input type="text" placeholder="最大的座位号" name="maxseat_number">
+
+                        <input type="submit" value="查询">
+                    </form>
+
                     <div class="table-responsive">
                         <table id="recent-purchases-listing" class="table">
                             <thead>
@@ -156,6 +164,7 @@
                                     <form method="post" action="http://localhost:8881/self_study_room/admin/room_list">
                                         <div class="form-check form-check-success">
                                             <label class="form-check-label">
+                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'available' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'available'}" th:value="${'available'}" name="status">
@@ -164,6 +173,7 @@
                                         </div>
                                         <div class="form-check form-check-warning">
                                             <label class="form-check-label">
+                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'maintenance' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'maintenance'}" th:value="${'maintenance'}" name="status">
@@ -180,7 +190,7 @@
                                             <button th:if="${seat.status == 'occupied'}" class="btn btn-warning btn-rounded btn-fw "
                                                     disabled>修改状态</button>
                                         </div>
-                                        <input type="hidden" th:value="${seat.seat_number}" name="seat_number">
+                                        <input hidden="hidden" name="seat_number" th:value="${seat.getSeat_number()}">
 
                                     </form>
 

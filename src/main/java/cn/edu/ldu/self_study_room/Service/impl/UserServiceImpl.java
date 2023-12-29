@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDao.insert(user);
             return "添加用户成功";
+
         } catch (Exception e) {
             e.printStackTrace();
             return "添加用户失败";

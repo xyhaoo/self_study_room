@@ -51,7 +51,6 @@ public class CommentServiceImpl implements CommentService {
             commentDao.insert(comment_id,post_id,user_id,comment_time,comment_content,is_best);
             return "评论成功～";
         }catch (Exception e){
-            System.out.println(e);
             return "评论失败了，请再次尝试。如果此问题依然存在请联系开发者！";
         }
     }

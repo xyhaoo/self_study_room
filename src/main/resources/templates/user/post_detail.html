@@ -155,55 +155,90 @@
         </ul>
     </nav>
 
-        <div class="col-lg-6 grid-margin stretch-card" style="margin: 0 auto">
-            <form id="dataformdelete" action="/self_study_room/user/deletefavorite"  >
 
-                <input type="hidden" id="room_id" name="room_id" value="" />
-                <input type="hidden" id="seat_number" name="seat_number" value="" />
-            </form>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">收藏的座位</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>自习室</th>
-                                <th>座位号</th>
-                                <th>状态</th>
-                                <th>预定</th>
-                                <th>删除</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+    <div class="main-panel   documentation">
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 doc-header">
+                        <h1 class="text-primary mt-4">帖子详情</h1>
+                    </div>
+                </div>
+                <div class="row doc-content">
+                    <div class="col-12 col-md-10 offset-md-1">
+                        <div class="col-12 grid-margin" id="doc-intro">
+                            <div class="card">
 
-                            <tr th:each="allss: ${alls}">
-                                <td th:text="${allss.getRoom_id()}"></td>
-                                <td th:text="${allss.getSeat_number()}"></td>
-                                <td th:text="${allss.getStatus()}"></td>
-<!--                                <td><a href="#" onclick="getInfo('${allss.getRoom_id()}', '${allss.getSeat_number()}')"><img src="/images/login/reservation.png"></a></td>-->
-                                <td><a href="http://localhost:8881/self_study_room/user/self_study_roompage"><img src="/images/login/reservation.png "></a></td>
-<!--                                <td>      <button type="button" class="btn btn-success btn-rounded btn-icon">-->
-<!--                                    <i class="mdi mdi-map-marker"></i>-->
-<!--                                </button></td>-->
-                                <td> <img src="/images/login/delete.jpg" onclick="deletefavorite(this)"> </td>
 
-                            </tr>
+                                <div class="card-body">
+                                    <h3 class="mb-4 mt-4" th:text="${post.post_title}"></h3>
+                                    <p th:text="${post.post_content}"></p>
+                                    <p th:text="${post.post_time}"></p>
+                                </div>
+                            </div>
+                        </div>
 
-                            </tbody>
-                        </table>
+                        <div class="col-12 grid-margin" id="doc-started" th:unless="${#lists.isEmpty(comments)}">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:each="comment: ${comments}">
+                                        <h3 class="mb-4" th:text="${comment.user_id}"></h3>
+                                        <div th:if="${comment._best != 1}">
+                                            <p th:text="${comment.comment_content}"></p>
+                                        </div>
 
+                                        <!--判断是否为优质回答，是就渲染这个-->
+                                        <div class="alert alert-success mt-4 d-flex align-items-center" role="alert"
+                                             th:if="${comment._best == 1}">
+                                            <i class="ti-info-alt me-4"></i>
+                                            <p th:text="${comment.comment_content}"></p>
+                                        </div>
+
+                                        <!--这里输出评论时间-->
+                                        <p class="d-inline"><strong th:text="${comment.comment_time}"></strong></p>
+
+                                        <div style="text-align: right; display: flex;">
+                                            <div th:if="${is_your_post == 'true'}">
+                                                <button type="button" class="btn btn-outline-success btn-fw">设置为最优回答</button>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-danger btn-fw">删除</button>
+                                        </div>
+
+                                        <hr class="mt-5">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- partial:../partials/_footer.html -->
+
+        <!-- partial -->
+<!--        评论的区域-->
+        <div style="margin: 0 auto;width: 100%" >
+            <form>
+                <input hidden="hidden" id="post_id" name="post_id">
+                <textarea style="width: 60%;height: 150px" name="comment_content" id="comment_content"></textarea>
+                <button type="submit"></button>
+            </form>
+
+        </div>
+
+
+
 
     </div>
 
 
 
 </div>
-<script>
+
+
+</div>
+
 
 
 
@@ -233,43 +268,9 @@
 </body>
 <script>
     function submitForm(){
-        Swal.fire({
-            title: '提示',
-            text: '预约成功'    ,
-            icon: 'success',
-            showConfirmButton: false
-        });
-        setTimeout(function() {
-            document.getElementById("deletenotice").submit();
-        }, 2000);
 
-
+        document.getElementById("deletenotice").submit();
     }
-    function deletefavorite(element) {
-        var row = element.parentNode.parentNode;
-        var tds = row.querySelectorAll("td");
-
-        var room_id = tds[0].textContent;
-        var seat_number = tds[1].textContent;
-        var status = tds[2].textContent;
-
-        document.getElementById("room_id").value = room_id;
-        document.getElementById("seat_number").value = seat_number;
-
-
-
-        Swal.fire({
-            title: '提示',
-            text: '删除成功'    ,
-            icon: 'success',
-            showConfirmButton: false
-        });
-        setTimeout(function() {
-            document.getElementById("dataformdelete").submit();
-        }, 2000);
-    }
-
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
