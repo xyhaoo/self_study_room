@@ -1,6 +1,8 @@
 package cn.edu.ldu.self_study_room.service.impl;
 
+import cn.edu.ldu.self_study_room.dao.CommentDao;
 import cn.edu.ldu.self_study_room.dao.PostDao;
+import cn.edu.ldu.self_study_room.entity.Comment;
 import cn.edu.ldu.self_study_room.entity.Post;
 import cn.edu.ldu.self_study_room.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostDao postDao;
+    @Autowired
+    private CommentDao commentDao;
 
     //查询所有记录，供用户或管理员点击论坛页面时展示所有帖子
     @Override
@@ -33,9 +37,14 @@ public class PostServiceImpl implements PostService {
     }
 
     //删除记录，供用户或管理员删除帖子
+    //删除帖子前，为防止外键冲突，应先删除这个帖子的所有回复
     @Override
     public String delete(String post_id) {
         try {
+            List<Comment> comments = commentDao.findCommentByPostId(post_id);
+            for (Comment comment: comments) {
+                commentDao.delete(comment.getComment_id());
+            }
             postDao.delete(post_id);
             return "删除成功～";
         }catch (Exception e){
@@ -53,14 +62,14 @@ public class PostServiceImpl implements PostService {
             return "修改失败了，请再次尝试。如果此问题依然存在请联系开发者！";
         }
     }
-    //修改记录，供用户或管理员修改帖子状态
+    //修改记录，帖子有最佳评论时或最佳评论被删除时自动修改帖子状态
     @Override
     public String update_status(String post_id, String post_status) {
         try {
             postDao.update_status(post_id, post_status);
-            return "修改成功～";
+            return "修改帖子状态成功～";
         }catch (Exception e){
-            return "修改失败了，请再次尝试。如果此问题依然存在请联系开发者！";
+            return "修改帖子状态失败了，请再次尝试。如果此问题依然存在请联系开发者！";
         }
     }
 

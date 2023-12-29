@@ -156,7 +156,6 @@
                                     <form method="post" action="http://localhost:8881/self_study_room/admin/room_list">
                                         <div class="form-check form-check-success">
                                             <label class="form-check-label">
-                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'available' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'available'}" th:value="${'available'}" name="status">
@@ -165,7 +164,6 @@
                                         </div>
                                         <div class="form-check form-check-warning">
                                             <label class="form-check-label">
-                                                <input type="hidden" name="room_id" th:value="${seat.room_id}">
                                                 <input type="radio" class="form-check-input"
                                                        th:disabled="${seat.status == 'maintenance' or seat.status == 'occupied'}"
                                                        th:checked="${seat.status == 'maintenance'}" th:value="${'maintenance'}" name="status">
@@ -182,6 +180,8 @@
                                             <button th:if="${seat.status == 'occupied'}" class="btn btn-warning btn-rounded btn-fw "
                                                     disabled>修改状态</button>
                                         </div>
+                                        <input type="hidden" th:value="${seat.seat_number}" name="seat_number">
+
                                     </form>
 
                                 </td>

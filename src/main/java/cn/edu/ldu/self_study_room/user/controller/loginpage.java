@@ -47,9 +47,9 @@ public class loginpage {
         System.out.println("Username: " + user_id);
         System.out.println("Password: " + password);
 
-        if(user_id.equals("admin") && password.equals("123456")){
+        if(user_id.equals("003") && password.equals("123456")){
             ModelAndView modelAndView = new ModelAndView("admin/admin_index");
-            modelAndView.addObject("cur_user", userService.findNameById(user_id));
+            modelAndView.addObject("cur_user", userService.findById(user_id));
             return modelAndView;
         }
 

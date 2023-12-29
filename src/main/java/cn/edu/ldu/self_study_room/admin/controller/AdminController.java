@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //这是管理员登陆后的一级页面，由tab栏分为四个管理项目页面：自习室管理、通知管理、用户管理和论坛管理
 //所有的方法都是直接点击
@@ -91,15 +94,12 @@ public class AdminController {
 
     //修改自习室位置状态
     @PostMapping("/room_list")
-    public ModelAndView seatManage(@RequestParam("room_id")int room_id,
+    public ModelAndView seatManage(@RequestParam("seat_number")int seat_number,
                                    @RequestParam(required = false)String status){
         ModelAndView modelAndView = new ModelAndView("redirect:/self_study_room/admin/room_list");
 
-        System.out.println(room_id);
-        System.out.println(status);
-
-//        String result = seatService.update(seat_number, status);
-//        modelAndView.addObject("result", result);
+        String result = seatService.update(seat_number, status);
+        modelAndView.addObject("result", result);
         return modelAndView;
     }
 
@@ -160,6 +160,18 @@ public class AdminController {
             if (posts.isEmpty()){
                 modelAndView.addObject("search_failed", "暂时没有用户发布帖子～");
             }else {
+                //找到每个帖子对应的回复数
+                ArrayList<Integer> reply_nums = new ArrayList<>();
+                for(Post post: posts){
+                    reply_nums.add(commentService.findCommentByPostId(post.getPost_id()).size());
+                }
+                Map<Post, Integer> map = new HashMap<>();
+                for (int i = 0; i < posts.size();i++){
+                    map.put(posts.get(i), reply_nums.get(i));
+                }
+
+                modelAndView.addObject("post_map", map);
+                modelAndView.addObject("reply_nums", reply_nums);
                 modelAndView.addObject("search_result", posts);
                 modelAndView.addObject("post_num", posts.size());
                 int resolved_num = 0;
@@ -187,21 +199,26 @@ public class AdminController {
         List<Comment> comments = commentService.findCommentByPostId(post_id);
         modelAndView.addObject("post",post);    //当前帖子的详细信息
         modelAndView.addObject("comments", comments);   //当前帖子的所有评论
-
-
         //这里需要获取当前用户id
         //Admin可以直接获得（id为003），user没写，user可以在a标签传递th：value，之后在url中展现，最后用@Path那个注解接收
         //具体url格式为：/forum/detail/{user_id}/{post_id}
         String user_id = "003";
-        //判断被查看详细信息打开的帖子是不是当前用户的,方便对帖子发起者有筛选优质评论的权限
-        if (user_id.equals(post.getUser_id())){
-            modelAndView.addObject("is_your_post", "true");
-        }else {
-            modelAndView.addObject("is_your_post", "false");
+        modelAndView.addObject("cur_user", userService.findById(user_id));
+
+        //判断当前帖子是否有最优回答，方便前端展示最优回答，以及不再渲染“设置为优质评论”按钮
+        String has_best_answer = "false";
+        for(Comment comment : comments){
+            if (comment.is_best()){
+                has_best_answer = "true";
+                break;
+            }
+            else {
+                has_best_answer = "false";
+            }
         }
+        modelAndView.addObject("has_best_answer", has_best_answer);
 
-
-
+        //现在前端拥有帖子详细界面里这个帖子的信息、这个帖子所有评论的信息，当前查看这个帖子的用户的信息、这条帖子有无最佳评论的判断
         return modelAndView;
     }
 
@@ -212,8 +229,7 @@ public class AdminController {
     @GetMapping("/post_publish/{user_id}")
     public ModelAndView post_publish(@PathVariable("user_id") String user_id){
         ModelAndView modelAndView = new ModelAndView("admin/post_publish");
-        userService.findNameById(user_id);
-        modelAndView.addObject("cur_user", userService.findNameById(user_id));
+        modelAndView.addObject("cur_user", userService.findById(user_id));
         return modelAndView;
     }
 

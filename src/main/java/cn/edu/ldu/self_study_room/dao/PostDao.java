@@ -27,9 +27,11 @@ public interface PostDao {
                 @Param("post_title") String post_title,
                 @Param("post_content") String post_content);
 
+    //更新帖子状态
     @Update("update post set post_status=#{post_status} where post_id=#{post_id}")
     void update_status(@Param("post_id")String post_id,
                 @Param("post_status") String post_status);
+
 
 
     //根据帖子号查询，用于点击某个帖子链接跳转到详细界面时，利用该帖子号渲染内容
